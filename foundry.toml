@@ -1,0 +1,38 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+test = "test"
+script = "script"
+solc_version = "0.8.24"
+optimizer = true
+optimizer_runs = 200
+via_ir = false
+show_progress = true
+
+remappings = [
+  "@openzeppelin/=lib/openzeppelin-contracts/"
+]
+
+[profile.default.fuzz]
+runs = 256
+
+[profile.default.invariant]
+runs = 256
+depth = 500
+
+[profile.long.fuzz]
+runs = 10000
+
+[profile.long.invariant]
+runs = 2000
+depth = 1000
+
+[profile.overnight.fuzz]
+runs = 100000
+
+[profile.overnight.invariant]
+runs = 50000
+depth = 10000
+# Enable coverage-guided fuzzing - stores/mutates call sequences that find new coverage
+corpus_dir = "cache/invariant-corpus"
