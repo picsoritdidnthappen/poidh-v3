@@ -9,10 +9,19 @@ optimizer = true
 optimizer_runs = 200
 via_ir = false
 show_progress = true
+fs_permissions = [{ access = "read-write", path = "./cache" }]
 
 remappings = [
   "@openzeppelin/=lib/openzeppelin-contracts/"
 ]
+
+[rpc_endpoints]
+base_sepolia = "${BASE_SEPOLIA_RPC_URL}"
+base = "${BASE_RPC_URL}"
+
+[etherscan]
+base_sepolia = { key = "${BASESCAN_API_KEY}", chain = 84532, url = "https://api-sepolia.basescan.org/api" }
+base = { key = "${BASESCAN_API_KEY}", chain = 8453, url = "https://api.basescan.org/api" }
 
 [profile.default.fuzz]
 runs = 256
@@ -36,3 +45,14 @@ runs = 50000
 depth = 10000
 # Enable coverage-guided fuzzing - stores/mutates call sequences that find new coverage
 corpus_dir = "cache/invariant-corpus"
+
+[fmt]
+bracket_spacing = false
+int_types = "long"
+line_length = 100
+multiline_func_header = "attributes_first"
+number_underscore = "thousands"
+quote_style = "double"
+single_line_statement_blocks = "single"
+tab_width = 2
+wrap_comments = true

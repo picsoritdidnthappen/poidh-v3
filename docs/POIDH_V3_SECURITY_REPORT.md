@@ -1,286 +1,321 @@
-# POIDH v3 — Security Analysis, Spec Compliance, and v2 Comparison
+# POIDH v3 Full Security Review, Known Vectors, and v2 Comparison
 
-This document maps the implemented `PoidhV3` rebuild in this repository to the **POIDH v3 Security Analysis & Rebuild Specification** (Dec 17, 2025) and summarizes the key differences vs. the exploited v2 design described in that spec.
+This document is a security-focused, implementation-level review of the v3 contracts in this repository:
 
-It is **not** a professional audit. It is an implementation-level report intended to make review, indexing, and verification easier.
+- what happened in the v2 exploit class (Dec 8, 2025),
+- what was changed in v3 (code + architecture),
+- which attack vectors are mitigated (with test evidence),
+- which vectors remain (economic griefing / liveness / MEV / admin risk), and
+- how v3 differs from the exploited v2 design described in the POIDH v3 rebuild spec.
 
-## Key Links (from the spec)
+It is **not** a professional audit.
 
-- Original exploit TX: https://basescan.org/tx/0x0545a4e5800632ba2194fb9349264ff7f3d3bb18d28ee168d57369b14422f11f
-- Whitehack TX: https://basescan.org/tx/0xdd1cb64cded3abcd5078773d7d6075780674c052a83a3d22b9c7f9538b1178b3
+## Key Links (external)
+
+- Original exploit TX (Base): https://basescan.org/tx/0x0545a4e5800632ba2194fb9349264ff7f3d3bb18d28ee168d57369b14422f11f
+- Whitehack TX (Base): https://basescan.org/tx/0xdd1cb64cded3abcd5078773d7d6075780674c052a83a3d22b9c7f9538b1178b3
 - Post-mortem: https://words.poidh.xyz/poidh-december-8th-exploit
 - v2 repo: https://github.com/picsoritdidnthappen/poidh-contracts
-- v1 repo: https://github.com/kaspotz/pics-or-it
 
-## Scope
+## Scope (what this doc covers)
 
-This report covers:
+Contracts:
 
-- `src/PoidhV3.sol` (bounty logic, voting, escrow accounting, pull withdrawals)
+- `src/PoidhV3.sol` (bounty creation, funding, voting, claim acceptance, pull payments)
 - `src/PoidhClaimNFT.sol` (claim NFT minted to escrow, transferred without callback)
-- Deploy script + tests, where relevant to security claims
 
-## Protocol Overview (v3 as implemented)
+Evidence:
 
-### Preserved core mechanics
+- Unit tests and red-team tests in `test/`
+- Fuzzing/invariants configured in `foundry.toml`
+- Monte Carlo simulation harness in `script/Simulate.s.sol` (writes to `cache/simulations/`)
 
-- **Solo bounties**: issuer funds a bounty and later accepts a claim directly.
-- **Open bounties**: issuer funds a bounty, others can contribute, claim selection is via a vote.
-- **Claims**: anyone (except issuer) can create a claim; a claim NFT is minted.
-- **Voting**: 48h `votingPeriod` (configurable) and **>50% by weight** to pass.
-- **Fee**: 2.5% (`FEE_BPS = 250`) routed to `treasury`.
+This doc does **not** review offchain UI/indexers, NFT metadata hosting, or deployment operations beyond footguns and trust assumptions.
 
-### Deliberate behavior changes (vs. v2 described in the spec)
+## Glossary / mental model
 
-1. **All value movement is pull-based**: payouts/refunds accrue to `pendingWithdrawals`, and users (and treasury) call `withdraw()`. No more inline `.call{value: ...}` to arbitrary recipients.
-2. **Open bounty cancellation is constant-time**: `cancelOpenBounty()` closes the bounty and refunds the issuer’s contribution; contributors individually claim refunds with `claimRefundFromCancelledOpenBounty()`.
-3. **Claim NFT semantics are “mint to escrow”**: claim NFT is minted to the POIDH contract (escrow) at claim creation, then transferred to bounty issuer on acceptance using `transferFrom` (not `safeTransferFrom`).
-4. **Once external funding happens, voting is always required**: `everHadExternalContributor[bountyId]` prevents “withdraw-to-solo then direct accept” edge cases.
+- **Bounty issuer**: the creator/funder of a bounty.
+- **Solo bounty**: only the issuer funds; issuer accepts claims directly.
+- **Open bounty**: multiple contributors; claim acceptance is normally via voting.
+- **Claim issuer**: address submitting a claim (mints a claim NFT).
+- **Escrow**: v3 holds funds and claim NFTs in the `PoidhV3` contract until resolution.
+- **Pull payments**: ETH is never “pushed” to arbitrary recipients inside core flows; it is credited to `pendingWithdrawals` and later claimed via `withdraw()` / `withdrawTo()`.
 
-## v2 Vulnerabilities (from the spec) and v3 Fixes
+## What happened in v2 (high level)
 
-### 2.1 ERC721 callback reentrancy in `_acceptClaim()` (blackhat)
+The v2 exploit class described in the spec (and reproduced in `test/PoidhV3.attack.t.sol`) centered on **reentrancy during external calls** combined with **incomplete state finalization**:
 
-**Spec’s root cause**: v2 used an ERC721 `safeTransfer` to a potentially-contract issuer before the bounty state was fully finalized and without enforcing `claim.accepted` on entry. The callback allowed re-entry to accept repeatedly and drain `bounty.amount`.
+1. **ERC721 callback reentrancy during claim acceptance (blackhat theft)**
+   - v2 transferred/moved the claim NFT using `safeTransfer*` to an issuer that might be a contract.
+   - That transfer invoked an `onERC721Received` callback on the issuer contract.
+   - During the callback, the attacker re-entered the acceptance path while the bounty’s balance/state was not fully finalized.
+   - Root causes (per spec): missing “claim already accepted” check and failing to zero the bounty amount before external interactions.
 
-**v3 mitigation summary**
+2. **Refund-loop reentrancy during open-bounty cancellation (whitehack rescue)**
+   - v2 refunded participants by iterating and performing `.call{value: ...}("")` in a loop.
+   - Participant accounting was not cleared before the external call(s), and the bounty was not marked closed until after the loop.
+   - A malicious participant could re-enter and trigger cross-function interactions leading to double refunds.
 
-- **State finalization is complete before external calls**:
-  - `bounty.amount = 0`
-  - `claim.accepted = true`
-  - voting state cleared (if applicable)
-- **No value transfer occurs in `_acceptClaim()`** (pull-only).
-- **No ERC721 receiver callback**:
-  - Claim NFT is transferred with `transferFrom`, not `safeTransferFrom`.
-  - Claim NFT is minted with `_mint`, not `_safeMint`.
-- **ReentrancyGuard applied at the public entrypoints** and the only external call to an untrusted receiver is `withdraw()`, which is also guarded.
+The v3 rebuild focuses on removing the entire class of “external callbacks before state finalization” and “push-based refunds in loops”.
 
-**Implementation references**
+## v3 architecture and design goals
 
-- Acceptance flow: `PoidhV3.acceptClaim()` / `PoidhV3._acceptClaim()` in `src/PoidhV3.sol`
-- NFT transfer uses `transferFrom`: `src/PoidhV3.sol` (`poidhNft.transferFrom(...)`)
-- NFT minted to escrow via `_mint`: `PoidhClaimNFT.mintToEscrow()` in `src/PoidhClaimNFT.sol`
+v3 (as implemented here) preserves the protocol’s core behavior (solo bounties, open bounties, voting, 2.5% fee) while enforcing modern Solidity safety properties:
 
-### 2.2 `cancelOpenBounty()` reentrancy (whitehack)
+### Design invariants v3 aims to enforce
 
-**Spec’s root cause**: v2 refunded participants in a loop using `.call` without clearing participant slots/amounts until after all calls completed, enabling reentrancy cross-calls and/or double refunds.
+1. **Checks-Effects-Interactions (CEI)**: all state is finalized before interacting with untrusted code.
+2. **ReentrancyGuard on state-changers**: all external, state-changing entrypoints are `nonReentrant`.
+3. **Pull payments**: the only generic ETH exits are `withdraw()` / `withdrawTo()`.
+4. **ERC721 callbacks avoided**:
+   - `PoidhClaimNFT` mints with `_mint` (not `_safeMint`)
+   - `PoidhV3` transfers claim NFTs with `transferFrom` (not `safeTransferFrom`)
 
-**v3 mitigation summary**
+### Core mechanics preserved (vs. v2 product behavior)
 
-- **No refund loop with external calls exists**.
-- `cancelOpenBounty()`:
-  - closes the bounty immediately (effects),
-  - refunds only the issuer’s slot immediately (effects → credit pending),
-  - emits event.
-- Contributors individually claim refunds after cancellation (`claimRefundFromCancelledOpenBounty()`), which:
-  - clears that contributor’s slot and amount (effects),
-  - credits `pendingWithdrawals` (effects),
-  - does **no external calls**.
+- **Solo bounties**: issuer funds and later accepts a claim directly.
+- **Open bounties**: issuer funds, others may contribute (up to a cap), claims are accepted via voting.
+- **Voting**: default 48h period, >50% by weight to pass.
+- **Fee**: 2.5% (`FEE_BPS = 250`) routed to immutable `treasury` (withdraws via pull payments).
 
-This removes both:
-- the “refund loop reentrancy” surface, and
-- the “gas grief / unbounded loop” DoS risk.
+### Deliberate behavior changes in v3 (vs. v2 described in the spec)
 
-**Implementation references**
+1. **All value movement is pull-based** (`pendingWithdrawals` + `withdraw()` / `withdrawTo()`).
+2. **Open bounty cancellation is constant-time**:
+   - issuer refund happens immediately,
+   - contributors claim refunds individually (`claimRefundFromCancelledOpenBounty()`).
+3. **Claim NFTs are escrowed**: minted to `PoidhV3`, transferred to bounty issuer only upon acceptance.
+4. **Once external funding happens, voting is always required**:
+   - `everHadExternalContributor[bountyId]` prevents “withdraw-to-solo then direct accept”.
+   - This closes a correctness hole but introduces an intentional griefing tradeoff (see “Known vectors”).
+5. **ClaimId `0` is reserved as a sentinel**:
+   - `bountyCurrentVotingClaim[bountyId] == 0` means “no active vote”.
+   - The constructor requires a non-zero `_startClaimIndex` so real claim IDs start at `>= 1` (indexer footgun if assumed otherwise).
 
-- `PoidhV3.cancelOpenBounty()` in `src/PoidhV3.sol`
-- `PoidhV3.claimRefundFromCancelledOpenBounty()` in `src/PoidhV3.sol`
+## v2 vs v3 comparison matrix (what changed and why)
 
-### 2.3 Additional concerns listed in the spec
+This table compares the exploited v2 design described in the spec to v3 as implemented in this repo.
 
-| Spec concern | v3 status | Notes |
-|---|---|---|
-| Cross-function reentrancy | Mitigated | Pull payments remove most external calls; external-facing state changers are `nonReentrant`. |
-| Permissionless `resolveVote()` | Preserved | `resolveVote()` can be called by anyone after the deadline; state machine is robust to caller identity. |
-| No minimum bounty amount | Fixed | `MIN_BOUNTY_AMOUNT` enforced on bounty creation. |
-| Unbounded arrays / iteration DoS | Mitigated | `MAX_PARTICIPANTS` bounds contributor lists; no participant refund loop exists; pagination helpers exist for reads. |
+| Area | v2 (spec-described) | v3 (this repo) | Security impact |
+|---|---|---|---|
+| Claim acceptance external calls | `safeTransfer*` used in acceptance (ERC721 callback surface) | `transferFrom` used; NFT minted with `_mint` | Removes ERC721 callback reentrancy vector |
+| Acceptance state finalization | Incomplete (per spec): bounty amount not zeroed; accepted flag not enforced on entry | `bounty.amount = 0` and `claim.accepted = true` set before any external interaction | Prevents replay/recursive payout |
+| Value transfers | Push-based `.call{value: ...}` in multiple flows (accept, cancel) | Pull-only via `pendingWithdrawals` + `withdraw()` / `withdrawTo()` | Greatly reduces interaction surface |
+| Open bounty cancel refunds | Refund loop with external calls | No external refund loop; issuer refunded, contributors self-claim refunds | Eliminates loop reentrancy + gas-limit DoS |
+| Voting double-vote prevention | Typical patterns require looping/resetting `hasVoted` | `voteRound` + `lastVotedRound` mapping | No O(n) resets; prevents double voting per round |
+| Voting liveness | Resolution might be issuer-only (varies by design) | Permissionless `resolveVote()` | Removes “issuer must be online” dependency |
+| Minimum bounty amount | No minimum (per spec concern) | Enforced `MIN_BOUNTY_AMOUNT` on bounty creation | Reduces dust spam of bounties |
+| Participant growth | Unbounded arrays (spec concern) | `MAX_PARTICIPANTS` cap; vacated slots are reused | Bounds contributor list size; “cap fill” griefing still exists while capital is locked |
+| Treasury configuration | Often mutable | Immutable `treasury` | Reduces governance/upgrade risk; increases misconfig risk |
+| Vote state representation | Typically separate boolean state | `bountyCurrentVotingClaim==0` sentinel; claimId `0` reserved | Simplifies vote-state checks; introduces deploy/indexer footgun |
 
-## Spec Compliance Matrix (v3 requirements)
+## Spec compliance (quick map)
 
-| Requirement (spec §3.1) | Implemented | Where |
+This repo was built to match the POIDH v3 rebuild spec’s *security properties* (even where the architecture differs).
+
+| Spec requirement | Implemented | Where / notes |
 |---|---:|---|
-| Reentrancy protection | Yes | `ReentrancyGuard` + `nonReentrant` on external state-changing functions in `src/PoidhV3.sol`. |
-| Strict CEI | Yes | All flows do checks → state updates → external calls; most flows have **no external calls** except `withdraw()` and ERC721 `transferFrom`. |
-| Solidity ^0.8.20+ + custom errors | Yes | `pragma ^0.8.24` and custom errors in `src/PoidhV3.sol` / `src/PoidhClaimNFT.sol`. |
-| Ownable2Step | Yes | `Ownable2Step` used in both contracts. |
-| Pull payments | Yes | `pendingWithdrawals` + `withdraw()` in `src/PoidhV3.sol`. |
-| Gas limits / bounded iterations | Yes | `MAX_PARTICIPANTS`; cancellation avoids loops; read helpers are paginated. |
+| Reentrancy protection | Yes | `ReentrancyGuard` + `nonReentrant` on state-changing entrypoints in `src/PoidhV3.sol` |
+| Strict CEI | Yes | State is finalized before external calls; most flows have no external calls |
+| Pull payments | Yes | `pendingWithdrawals` + `withdraw()` / `withdrawTo()` in `src/PoidhV3.sol` |
+| Bounded iteration / gas safety | Partial | `MAX_PARTICIPANTS` caps participants; cancellation avoids refund loops; claim spam remains possible |
+| Ownable2Step | Partial | `PoidhClaimNFT` uses `Ownable2Step` (for `setPoidh()` ownership). `PoidhV3` has no owner/admin surface. |
+| NFT callback avoidance | Yes | `_mint` + `transferFrom` in `src/PoidhClaimNFT.sol` / `src/PoidhV3.sol` |
 
-## Architecture Notes (spec §3.2)
+Note: the spec suggested a separate vault; this implementation keeps escrow + ledger inside `PoidhV3` to reduce cross-contract complexity.
 
-The spec suggested a separate `PoidhVault` contract. This implementation **inlines** vault behavior into `PoidhV3`:
+## v2 exploit vectors (theft-class) and how v3 blocks them
 
-- `PoidhV3` holds funds (native token) and maintains a ledger `pendingWithdrawals`.
-- `withdraw()` is the only generic ETH exit.
+These are vectors that lead to theft in v2 (per spec) and are explicitly tested in v3.
 
-Security-wise, this still satisfies the same goals (pull over push), while reducing cross-contract complexity. If you want a separate vault later, the current `pendingWithdrawals` ledger is the natural seam to extract.
+| Vector | v2 risk | v3 mitigation | Evidence |
+|---|---|---|---|
+| ERC721 callback reentrancy on accept | Callback re-enters while bounty not finalized | Finalize state first + `transferFrom` + `_mint` | `test/PoidhV3.attack.t.sol` (`test_attack_erc721_callback_reentrancy_BLOCKED`) |
+| Refund-loop reentrancy on cancelOpenBounty | Loop sends ETH before clearing state | No ETH sends in loop; contributor refunds are pull-claimed | `test/PoidhV3.attack.t.sol` (`test_attack_cancel_loop_reentrancy_BLOCKED`) |
+| Cross-function reentrancy | Re-enter different function during callback/receive | Pull payments + `nonReentrant` on state-changers | `test/PoidhV3.attack.t.sol` (`test_attack_cross_function_reentrancy_BLOCKED`) |
+| Withdraw reentrancy | Re-enter withdraw during ETH receive | `withdraw()` is `nonReentrant` and zeroes first | `test/PoidhV3.attack.t.sol` (`test_attack_withdraw_reentrancy_BLOCKED`) |
+| Replay accepted claim | Accept same claim twice | `ClaimAlreadyAccepted` enforced | `test/PoidhV3.attack.t.sol` (`test_attack_replay_accepted_claim_BLOCKED`) |
+| Accept claim on finalized bounty | Accept after bounty closed/claimed | `bountyChecks`/state guards | `test/PoidhV3.attack.t.sol` (`test_attack_claim_on_finalized_bounty_BLOCKED`) |
+| Double vote in same round | Vote twice | `voteRound` + `lastVotedRound` | `test/PoidhV3.attack.t.sol` (`test_attack_double_vote_BLOCKED`) |
+| Withdraw during voting | Withdraw to change weight mid-vote | `bountyChecks` blocks withdrawals while voting | `test/PoidhV3.attack.t.sol` (`test_attack_withdraw_during_voting_BLOCKED`) |
+| Accept unauthorized | Non-issuer tries to accept | `WrongCaller` checks | `test/PoidhV3.attack.t.sol` (`test_attack_frontrun_claim_acceptance`) |
 
-## Critical Function Mapping (spec §3.3)
+### Why v3’s approach works (the important part)
 
-### `_acceptClaim()` (spec §3.3.1)
+v3 does not rely on a single fix; it removes the entire “reenter while value exists” class by combining:
 
-Matches the spec’s required properties:
+1. **State finalization before interactions**
+2. **No ETH sends during business logic** (pull-only)
+3. **No ERC721 receiver callbacks** (mint + transfer choices)
+4. **ReentrancyGuard at all state-changing entrypoints**
 
-- checks `claim.accepted`
-- checks `bounty.amount <= balance`
-- **zeros `bounty.amount`** before any external interaction
-- uses pull payments
-- uses `transferFrom` (no ERC721 callback)
+## Known vectors that remain (non-theft): griefing, liveness, and MEV
 
-### `withdraw()` (spec §3.3.2)
+These are real, expected risks in an open system. They don’t typically allow theft, but they can harm UX, liveness, or fairness.
 
-Implements “withdraw pattern” exactly:
+### Confirmed griefing / DoS vectors
 
-- checks amount > 0
-- zeros storage
-- then `.call{value: amount}("")`
-- emits `Withdrawal`
+| Vector | Cost to attacker | Impact | Current status | Possible mitigations (tradeoffs) |
+|---|---:|---|---|---|
+| Minimum-contribution “force voting” | `MIN_CONTRIBUTION` + gas (principal recoverable) | Flips `everHadExternalContributor=true` forever; issuer can’t direct-accept | Confirmed (`test/PoidhV3.griefing.t.sol`) | Product decision: raise `MIN_CONTRIBUTION`, add refundable join bond, or allow issuer “close funding” window |
+| Participant cap fill / temporary join blocking | `(MAX_PARTICIPANTS-1)*MIN_CONTRIBUTION` + gas (principal recoverable) | Blocks new joins while all slots are occupied | Confirmed (`test/PoidhV3.griefing.t.sol`, `script/Simulate.s.sol`) | Higher min join, join bond, close-funding window, or raise cap (more DoS surface) |
+| Claim spam | Gas only | Unlimited claims bloat storage/indexers; can make UI unusable | Confirmed (`test/PoidhV3.griefing.t.sol`) | Claim bond; per-bounty claim cap; issuer “close submissions” switch; require minimum claim metadata constraints |
+| Join-before-vote MEV | Must lock ETH | Attacker joins right before issuer starts vote, swings weight | Confirmed (`test/PoidhV3.griefing.t.sol`) | Snapshot-at-start is already implemented; remaining mitigation requires a product change (close-funding window / delay / bond) |
 
-### `withdrawFromOpenBounty()` (spec §3.3.3)
+### MEV / timing and fairness
 
-Implemented with:
+| Vector | Impact | Notes |
+|---|---|---|
+| Permissionless `resolveVote()` timing | Bots can resolve immediately after deadline | Usually acceptable; improves liveness |
+| Whale dominance | 1 address can dominate voting by funding | This is inherent in 1p1v-by-weight; mitigations change product behavior (e.g., quadratic voting) |
 
-- contributor slot clearing (address/amount) before crediting pending
-- no external calls
-- `nonReentrant`
+### Self-DOS and edge-case risks
 
-### `cancelOpenBounty()` (spec §3.3.4)
+| Risk | Impact | Notes / mitigations |
+|---|---|---|
+| Receiver reverts on `withdraw()` | Funds stay pending forever for that contract | `withdrawTo(address payable)` is implemented to route to an EOA (caller-controlled) |
+| Claim NFT “sink” issuers | Issuer is a contract that can’t transfer/handle NFTs | Mitigated: bounty creation is EOA-only (`msg.sender == tx.origin`) |
+| Extra ETH sent to contract | Unattributed ETH could break accounting assumptions | Mitigated: `PoidhV3.receive()` reverts (`DirectEtherNotAccepted`) |
 
-The spec’s example loops over all contributors and credits pending; this implementation instead:
+## Admin / trust / “open system” considerations
 
-- closes the bounty and refunds the issuer immediately
-- requires contributors to claim refunds individually
+v3 reduces governance surface, but it is not “fully trustless” because the claim NFT contract has an owner that can rewire the authorized minter.
 
-This is a stricter DoS-resistant design: no single call risks running out of gas due to a large contributor list.
+### Admin powers in this repo
 
-## NFT Contract Considerations (spec §3.5)
+| Control | Where | Power | Risk | How to minimize centralization |
+|---|---|---|---|---|
+| `setPoidh()` | `src/PoidhClaimNFT.sol` | Can change which POIDH contract can mint | Can brick claim creation; can mint from new POIDH | Transfer NFT ownership to multisig and/or renounce after wiring |
 
-This implementation follows the spec’s recommendation to deploy a **fresh v3 claim NFT** contract and to avoid callbacks:
+### What admin cannot do (in this design)
 
-- `PoidhClaimNFT.mintToEscrow()` uses `_mint` (not `_safeMint`).
-- `PoidhV3._acceptClaim()` uses `transferFrom` (not `safeTransferFrom`).
+- There is no “admin withdraw” or “sweep user funds” path in `PoidhV3`.
+- Funds can always exit via `cancel*`/`claimRefund*`/`withdraw()` / `withdrawTo()`.
+- `treasury` is immutable (but that creates a deploy footgun).
 
-## Events (spec “better events”)
+## Tests, fuzzing, invariants, and simulations (evidence, not proof)
 
-The v3 events are intentionally more indexer-friendly:
+### Test suite overview
 
-- Critical IDs and addresses are `indexed` (bountyId, claimId, issuers, voters).
-- `ClaimAccepted` includes `bountyAmount`, `payout`, and `fee` for transparent accounting.
-- New events added for voting lifecycle and pull-based movements:
-  - `VotingStarted`, `VoteCast`, `VotingResolved`
-  - `Withdrawal`, `RefundClaimed`
+Test coverage is organized into these suites (see `forge test --summary` for current counts):
 
-Indexers consuming v2 events must update to the new event schema.
+| Test Suite | Focus |
+|---|---|
+| `test/PoidhV3.unit.t.sol` | Core functionality |
+| `test/PoidhV3.t.sol` | End-to-end happy paths |
+| `test/PoidhV3.attack.t.sol` | v2 exploit reproduction (blocked) |
+| `test/PoidhV3.griefing.t.sol` | Economic griefing & edge cases |
+| `test/PoidhV3.coverage.t.sol` | Defensive branches + error paths |
+| `test/PoidhV3.fuzz.t.sol` | Parameterized fuzzing |
+| `test/PoidhV3.invariant.t.sol` | Stateful fuzzing / invariants |
+| `test/PoidhClaimNFT.t.sol` | NFT contract |
+| `test/Deploy.t.sol` | Deployment wiring |
 
-## Testing, Coverage, and Fuzzing (spec §4)
+### Attack test matrix (v2 exploit reproduction + security checks)
 
-### What exists in this repo
+The most direct “what can go wrong” list lives in `test/PoidhV3.attack.t.sol`. Summary:
 
-- Unit tests: `test/PoidhV3.unit.t.sol`
-- Fuzz tests: `test/PoidhV3.fuzz.t.sol`
-- Invariants: `test/PoidhV3.invariant.t.sol`
-- Coverage-focused tests (edge paths): `test/PoidhV3.coverage.t.sol`
-- Deploy script test (coverage + wiring): `test/Deploy.t.sol`
-- NFT tests: `test/PoidhClaimNFT.t.sol`
+| Test | Vector / intent | v3 outcome |
+|---|---|---|
+| `test_attack_erc721_callback_reentrancy_BLOCKED` | ERC721 receiver callback reentrancy in acceptance | Blocked |
+| `test_attack_cancel_loop_reentrancy_BLOCKED` | Refund-loop reentrancy on cancelOpenBounty | Blocked (no looped sends) |
+| `test_attack_cross_function_reentrancy_BLOCKED` | Re-enter different function during callback | Blocked |
+| `test_attack_withdraw_reentrancy_BLOCKED` | Re-enter `withdraw()` during ETH receive | Blocked |
+| `test_attack_double_vote_BLOCKED` | Vote twice in same round | Blocked |
+| `test_attack_withdraw_during_voting_BLOCKED` | Withdraw contribution during active vote | Blocked |
+| `test_attack_replay_accepted_claim_BLOCKED` | Accept same claim twice | Blocked |
+| `test_attack_claim_on_finalized_bounty_BLOCKED` | Create/accept claim after bounty finalized | Blocked |
+| `test_nft_uses_transferFrom_not_safeTransferFrom` | Ensure NFT transfer does not invoke ERC721Receiver | Verified |
+| `test_attack_frontrun_claim_acceptance` | Non-issuer tries to accept claim | Blocked |
+| `test_attack_spam_claims_griefing` | Claim spam as a griefing vector | Documented (possible) |
+| `test_attack_fee_overflow` | Large amount fee math | Safe |
+| `test_attack_zero_amount_edge_cases` | Zero/dust amount edge cases | Blocked |
+| `test_attack_issuer_self_claim` | Issuer claims own bounty | Blocked |
+| `test_attack_claim_nonexistent_bounty` | Claim on invalid bountyId | Blocked |
+| `test_attack_accept_nonexistent_claim` | Accept invalid claimId | Blocked |
+| `test_attack_vote_weight_manipulation` | Withdraw/rejoin manipulation around voting | Blocked |
+| `test_attack_early_vote_resolution` | Resolve vote before deadline | Blocked |
+| `test_attack_dos_max_participants` | Fill participant slots to cap | Enforced |
 
-### Coverage status
+### Griefing/edge-case matrix (known limitations)
 
-Run:
+The “open-system” limitations are intentionally documented in `test/PoidhV3.griefing.t.sol`:
+
+| Test | Vector / intent | Finding |
+|---|---|---|
+| `test_GRIEFING_minContribution_forces_voting` | Minimum join flips `everHadExternalContributor` forever | Confirmed griefing |
+| `test_GRIEFING_join_before_vote_frontrun` | Join immediately before vote start | Confirmed griefing / MEV |
+| `test_NO_PAUSE_contract_not_pausable` | No admin pause exists | Verified |
+| `test_FOOTGUN_wrong_treasury_permanent_loss` | Immutable treasury misconfig | Confirmed footgun |
+| `test_EDGE_CASE_contracts_cannot_create_bounties` | Contracts cannot create bounties | Verified |
+| `test_DOS_claim_spam` | Spam claims (storage/indexer bloat) | Confirmed DoS vector |
+| `test_DOS_participant_slot_exhaustion` | Fill participant slots to cap (while occupied) | Confirmed DoS vector |
+| `test_SELF_DOS_receiver_revert` | Receiver reverts on withdraw | Self-DoS (funds stuck pending) |
+| `test_MEV_vote_resolution_timing` | Permissionless resolve timing | Acceptable / informational |
+| `test_EDGE_CASE_issuer_contribution_matters` | Issuer cannot withdraw from open bounty | Verified |
+| `test_EDGE_CASE_vote_weight_after_withdraw` | Withdrawn contributors can’t vote | Verified |
+| `test_EDGE_CASE_multiple_claims_accept_any` | Issuer can accept any valid claim | Verified |
+
+Run everything:
 
 ```bash
-forge coverage --exclude-tests
+forge test -vvv
 ```
 
-This repo targets **100% coverage** for source contracts (`src/`) and the deploy script.
-
-### “Hours of fuzzing”
-
-Foundry supports a long-running profile without changing code:
-
-```bash
-FOUNDRY_PROFILE=long forge test
-```
+### Fuzzing & invariants profiles
 
 Profiles are defined in `foundry.toml`:
 
 - default: fuzz runs 256, invariant runs 256, depth 500
 - long: fuzz runs 10,000, invariant runs 2,000, depth 1,000
+- overnight: fuzz runs 100,000, invariant runs 50,000, depth 10,000 (very slow)
 
-For multi-hour fuzzing, run the `long` profile repeatedly (or increase runs/depth further) and keep the machine stable (disable sleep).
+Run long fuzzing / invariants:
 
-## Threat Model & Known Limitations
+```bash
+FOUNDRY_PROFILE=long forge test
+```
 
-This section documents attack vectors that are **not exploits** but represent economic griefing, admin risk, or edge cases that may warrant future mitigation.
+What the invariants assert (high-level):
 
-### Confirmed Griefing Vectors
+- **No “ghost payouts”**: if a bounty is claimed, it is finalized (`amount == 0`), the claim is marked accepted, and the NFT is delivered to the bounty issuer.
+- **Escrow accounting consistency**: for *active* open bounties, `bounty.amount` matches the sum of `participantAmounts`.
+- **Voting state consistency**: vote trackers are either fully empty (no active vote) or reference a real, unaccepted claim for that bounty.
+- **No pending withdrawals to `address(0)`**: prevents accidental crediting to the zero address.
 
-| Vector | Cost to Attacker | Impact | Mitigation |
-|--------|------------------|--------|------------|
-| **1-wei force voting** | 1 wei + ~50k gas | Any third party can `joinOpenBounty` with dust and permanently flip `everHadExternalContributor=true`, forcing the issuer into voting even after the griefer withdraws. | Add `MIN_CONTRIBUTION_AMOUNT` for `joinOpenBounty`. |
-| **Frontrun join before vote** | Must lock ETH for voting period | Attacker sees `submitClaimForVote` pending and joins right before, gaining vote weight to swing outcome. | Snapshot weights at vote start. |
-| **Claim spam** | Gas only (~250k gas/claim) | Anyone can create unlimited claims per bounty, bloating storage and indexers. | Add claim deposit/bond, per-bounty cap, or let issuer close claims. |
-| **Participant slot exhaustion** | ~0.099 ETH (99 × MIN_BOUNTY) | Attacker fills all 100 participant slots with dust, blocking legitimate high-value contributors. | Minimum contribution per participant, or let issuer close funding. |
+### Coverage (high signal for missed branches)
 
-### Admin / Configuration Risks
+```bash
+forge coverage --exclude-tests
+```
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| **Pause blocks withdraw** | `pause()` blocks all state-changing calls including `withdraw()`; compromised owner can "soft rug" by pausing indefinitely. | Use multisig owner, timelock, or exempt `withdraw()` from pause. |
-| **Wrong treasury address** | `treasury` is immutable; wrong address = permanent fee loss. | Deploy checklist + CI validation; consider upgradeable treasury with timelock. |
-| **Malicious NFT contract** | `poidhNft` is immutable; hostile contract could attempt callback-style grief. | Only deploy with audited `PoidhClaimNFT`; deploy NFT + POIDH as a package. |
+### Monte Carlo simulations
 
-### Self-DOS Risks
+The simulation script runs many “toy” voting rounds and writes JSONL + a summary to `cache/simulations/`:
 
-| Risk | Impact | Mitigation |
-|------|--------|------------|
-| **Receiver revert on withdraw** | If `msg.sender` is a contract that reverts on receiving ETH, `withdraw()` reverts and funds stay pending forever. | Add `withdrawTo(address payable to)` so contracts can redirect to an EOA. |
+```bash
+# args: seed runs participants yesBps(0..10000)
+forge script script/Simulate.s.sol:Simulate --sig "runVoting(uint256,uint256,uint256,uint256)" -- 1 1000 25 6000
 
-### MEV / Timing Opportunities
+forge script script/Simulate.s.sol:Simulate --sig "runSlotExhaustion()"
+```
 
-| Opportunity | Impact | Notes |
-|-------------|--------|-------|
-| **Vote resolution timing** | Anyone can call `resolveVote()` after deadline; bots can frontrun resolution. | Generally acceptable (permissionless finalization). Mitigate if needed with commit-reveal voting. |
+This is not a replacement for formal verification, but it is a good way to sanity-check outcomes and explore design tradeoffs (vote thresholds, weight distributions, sybil scenarios).
 
-### Edge Cases Verified
+## Production readiness (practical checklist)
 
-- Issuer cannot withdraw from open bounty (prevents 0-amount bounties)
-- Contract issuers receive NFTs via `transferFrom` (may get stuck if contract lacks transfer capability)
-- Withdrawn contributors cannot vote
-- Issuer can accept any valid claim (not just the first)
+If “production ready” includes not just theft-safety but also acceptable liveness/fairness for an open system, the remaining decisions are mostly **product/security tradeoffs**:
 
-### Recommended Future Mitigations
-
-1. **`MIN_CONTRIBUTION_AMOUNT`** for `joinOpenBounty` (e.g., 0.001 ETH) to prevent 1-wei griefing
-2. **Claim deposit/bond** refundable on acceptance, forfeited on spam
-3. **`withdrawTo(address payable to)`** for stuck contracts
-4. **Snapshot weights at vote start** to prevent frontrun vote manipulation
-5. **Multisig + timelock** for owner operations
-
-## Deployment Checklist (implementation reality)
-
-Implemented:
-
-- NFT deployed and wired to POIDH via `setPoidh()` (deploy script).
-- Ownership can be transferred to a multisig (commented in deploy script).
-
-Recommended before mainnet:
-
-- Run Slither + review any findings.
-- Run a long fuzz pass for multiple hours (increase `FOUNDRY_PROFILE=long` parameters as needed).
-- Get an external audit focused on: state machine, griefing, tokenURI trust assumptions, and any downstream integrations.
-- Review the Threat Model above and decide which mitigations to implement.
-
-## Test Coverage Summary
-
-| Test Suite | Tests | Focus |
-|------------|-------|-------|
-| `PoidhV3.unit.t.sol` | 33 | Core functionality |
-| `PoidhV3.attack.t.sol` | 21 | v2 exploit reproduction (all blocked) |
-| `PoidhV3.griefing.t.sol` | 14 | Economic griefing & edge cases |
-| `PoidhV3.coverage.t.sol` | 28 | Edge path coverage |
-| `PoidhV3.fuzz.t.sol` | 2 | Parameterized fuzzing |
-| `PoidhV3.invariant.t.sol` | 4 | Stateful fuzzing (8M+ calls verified) |
-| `PoidhClaimNFT.t.sol` | 4 | NFT contract |
-| `Deploy.t.sol` | 1 | Deployment script |
-| **Total** | **107** | |
-
+1. Decide whether to mitigate:
+   - minimum-contribution “force voting”,
+   - claim spam,
+   - participant cap fill / temporary join blocking,
+   - join-before-vote MEV.
+2. Decide the governance stance:
+   - multisig + timelock (recommended),
+   - eventual ownership renounce for `PoidhClaimNFT` (optional, but makes incident response harder).
+3. Run static analysis (Slither) + long fuzzing repeatedly; then get an external audit focused on:
+   - state machine correctness,
+   - griefing/liveness,
+   - metadata/URI assumptions,
+   - integration surfaces (frontends/indexers).

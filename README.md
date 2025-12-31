@@ -7,7 +7,6 @@ based on the v2 onchain source and the accompanying security specification.
 
 ```bash
 forge --version
-forge install --no-git OpenZeppelin/openzeppelin-contracts
 forge test -vvv
 ```
 
@@ -36,16 +35,38 @@ forge coverage --exclude-tests
 ## Security report
 
 - `docs/POIDH_V3_SECURITY_REPORT.md`
+- `docs/README.md` (docs index)
+- `docs/MAINNET_READINESS.md` (audit → ops → deployment plan)
+- `SECURITY.md` (vulnerability reporting)
 
 ## Deploy
 
 Example (edit addresses/params inside the script):
 
 ```bash
+export POIDH_TREASURY=0x...
+export POIDH_START_CLAIM_INDEX=1
+# optional
+export POIDH_MULTISIG=0x...
+export POIDH_NFT_NAME="poidh claims v3"
+export POIDH_NFT_SYMBOL="POIDH3"
+
 forge script script/Deploy.s.sol:Deploy --rpc-url <RPC_URL> --private-key <PK> --broadcast --verify
 ```
 
 Note: `POIDH_START_CLAIM_INDEX` must be `>= 1` (claimId `0` is reserved as a sentinel).
+
+## Simulations
+
+Monte Carlo voting simulations (writes results under `cache/simulations/`):
+
+```bash
+# args: seed runs participants yesBps(0..10000)
+forge script script/Simulate.s.sol:Simulate --sig "runVoting(uint256,uint256,uint256,uint256)" -- 1 1000 25 6000
+
+# Demonstrate participant cap + slot reuse behavior
+forge script script/Simulate.s.sol:Simulate --sig "runSlotExhaustion()"
+```
 
 ## Key security changes (high level)
 

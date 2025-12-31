@@ -1,0 +1,19 @@
+# Foundry artifacts
+out/
+cache/
+broadcast/
+coverage/
+coverage.lcov
+*.lcov
+fuzzing-*.log
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+lib

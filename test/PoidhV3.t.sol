@@ -6,84 +6,89 @@ import {PoidhV3} from "../src/PoidhV3.sol";
 import {PoidhClaimNFT} from "../src/PoidhClaimNFT.sol";
 
 contract PoidhV3Test is Test {
-    PoidhV3 poidh;
-    PoidhClaimNFT nft;
+  PoidhV3 poidh;
+  PoidhClaimNFT nft;
 
-    address treasury = address(0xBEEF);
-    address issuer = address(0xA11CE);
-    address claimant = address(0xB0B);
-    address contributor = address(0xCAFE);
+  address treasury;
+  address issuer;
+  address claimant;
+  address contributor;
 
-    function setUp() public {
-        nft = new PoidhClaimNFT("poidh claims v3", "POIDH3");
-        poidh = new PoidhV3(address(nft), treasury, 1);
-        nft.setPoidh(address(poidh));
+  function setUp() public {
+    treasury = makeAddr("treasury");
+    issuer = makeAddr("issuer");
+    claimant = makeAddr("claimant");
+    contributor = makeAddr("contributor");
 
-        vm.deal(issuer, 10 ether);
-        vm.deal(claimant, 10 ether);
-        vm.deal(contributor, 10 ether);
-    }
+    nft = new PoidhClaimNFT("poidh claims v3", "POIDH3");
+    poidh = new PoidhV3(address(nft), treasury, 1);
+    nft.setPoidh(address(poidh));
 
-    function test_soloBounty_acceptClaim_paysOutViaPending() public {
-        vm.prank(issuer);
-        poidh.createSoloBounty{value: 1 ether}("solo", "desc");
+    vm.deal(issuer, 10 ether);
+    vm.deal(claimant, 10 ether);
+    vm.deal(contributor, 10 ether);
+  }
 
-        vm.prank(claimant);
-        poidh.createClaim(0, "claim", "desc", "ipfs://x");
+  function test_soloBounty_acceptClaim_paysOutViaPending() public {
+    vm.prank(issuer, issuer); // Set both msg.sender and tx.origin
+    poidh.createSoloBounty{value: 1 ether}("solo", "desc");
 
-        vm.prank(issuer);
-        poidh.acceptClaim(0, 1);
+    vm.prank(claimant);
+    poidh.createClaim(0, "claim", "desc", "ipfs://x");
 
-        // payout = 0.975 ether, fee = 0.025 ether
-        assertEq(poidh.pendingWithdrawals(claimant), 0.975 ether);
-        assertEq(poidh.pendingWithdrawals(treasury), 0.025 ether);
-        // NFT transferred to issuer
-        assertEq(nft.ownerOf(1), issuer);
-    }
+    vm.prank(issuer, issuer);
+    poidh.acceptClaim(0, 1);
 
-    function test_openBounty_voting_flow() public {
-        vm.prank(issuer);
-        poidh.createOpenBounty{value: 1 ether}("open", "desc");
+    // payout = 0.975 ether, fee = 0.025 ether
+    assertEq(poidh.pendingWithdrawals(claimant), 0.975 ether);
+    assertEq(poidh.pendingWithdrawals(treasury), 0.025 ether);
+    // NFT transferred to issuer
+    assertEq(nft.ownerOf(1), issuer);
+  }
 
-        vm.prank(contributor);
-        poidh.joinOpenBounty{value: 1 ether}(0);
+  function test_openBounty_voting_flow() public {
+    vm.prank(issuer, issuer);
+    poidh.createOpenBounty{value: 1 ether}("open", "desc");
 
-        vm.prank(claimant);
-        poidh.createClaim(0, "claim", "desc", "ipfs://x");
+    vm.prank(contributor, contributor);
+    poidh.joinOpenBounty{value: 1 ether}(0);
 
-        vm.prank(issuer);
-        poidh.submitClaimForVote(0, 1);
+    vm.prank(claimant);
+    poidh.createClaim(0, "claim", "desc", "ipfs://x");
 
-        // contributor votes yes
-        vm.prank(contributor);
-        poidh.voteClaim(0, true);
+    vm.prank(issuer, issuer);
+    poidh.submitClaimForVote(0, 1);
 
-        // warp past deadline
-        vm.warp(block.timestamp + 2 days + 1);
+    // contributor votes yes
+    vm.prank(contributor);
+    poidh.voteClaim(0, true);
 
-        poidh.resolveVote(0);
+    // warp past deadline
+    vm.warp(block.timestamp + 2 days + 1);
 
-        assertEq(nft.ownerOf(1), issuer);
-        assertEq(poidh.pendingWithdrawals(claimant), 1.95 ether); // 2 ether * (1 - 2.5%)
-        assertEq(poidh.pendingWithdrawals(treasury), 0.05 ether);
-    }
+    poidh.resolveVote(0);
 
-    function test_cancelOpenBounty_refund_claim() public {
-        vm.prank(issuer);
-        poidh.createOpenBounty{value: 1 ether}("open", "desc");
+    assertEq(nft.ownerOf(1), issuer);
+    assertEq(poidh.pendingWithdrawals(claimant), 1.95 ether); // 2 ether * (1 - 2.5%)
+    assertEq(poidh.pendingWithdrawals(treasury), 0.05 ether);
+  }
 
-        vm.prank(contributor);
-        poidh.joinOpenBounty{value: 1 ether}(0);
+  function test_cancelOpenBounty_refund_claim() public {
+    vm.prank(issuer, issuer);
+    poidh.createOpenBounty{value: 1 ether}("open", "desc");
 
-        vm.prank(issuer);
-        poidh.cancelOpenBounty(0);
+    vm.prank(contributor, contributor);
+    poidh.joinOpenBounty{value: 1 ether}(0);
 
-        // issuer refunded automatically
-        assertEq(poidh.pendingWithdrawals(issuer), 1 ether);
+    vm.prank(issuer, issuer);
+    poidh.cancelOpenBounty(0);
 
-        // contributor claims
-        vm.prank(contributor);
-        poidh.claimRefundFromCancelledOpenBounty(0);
-        assertEq(poidh.pendingWithdrawals(contributor), 1 ether);
-    }
+    // issuer refunded automatically
+    assertEq(poidh.pendingWithdrawals(issuer), 1 ether);
+
+    // contributor claims
+    vm.prank(contributor);
+    poidh.claimRefundFromCancelledOpenBounty(0);
+    assertEq(poidh.pendingWithdrawals(contributor), 1 ether);
+  }
 }
