@@ -124,10 +124,11 @@ contract PoidhV3 is ReentrancyGuard {
   event BountyCreated(
     uint256 indexed id,
     address indexed issuer,
-    string name,
+    string title,
     string description,
     uint256 amount,
-    uint256 createdAt
+    uint256 createdAt,
+    bool isOpenBounty
   );
 
   event ClaimCreated(
@@ -135,9 +136,10 @@ contract PoidhV3 is ReentrancyGuard {
     address indexed issuer,
     uint256 indexed bountyId,
     address bountyIssuer,
-    string name,
+    string title,
     string description,
-    uint256 createdAt
+    uint256 createdAt,
+    string imageUri
   );
 
   event ClaimAccepted(
@@ -150,23 +152,29 @@ contract PoidhV3 is ReentrancyGuard {
     uint256 fee
   );
 
-  event BountyJoined(uint256 indexed bountyId, address indexed participant, uint256 amount);
-  event ClaimSubmittedForVote(uint256 indexed bountyId, uint256 indexed claimId);
+  event BountyJoined(
+    uint256 indexed bountyId,
+    address indexed participant,
+    uint256 amount,
+    uint256 latestBountyBalance
+  );
   event BountyCancelled(uint256 indexed bountyId, address indexed issuer, uint256 issuerRefund);
-  event ResetVotingPeriod(uint256 indexed bountyId);
-
-  /// @notice Legacy vote event for ABI/indexer compatibility.
-  event VoteClaim(address indexed voter, uint256 indexed bountyId, uint256 indexed claimId);
-
   event WithdrawFromOpenBounty(
-    uint256 indexed bountyId, address indexed participant, uint256 amount
+    uint256 indexed bountyId,
+    address indexed participant,
+    uint256 amount,
+    uint256 latestBountyAmount
   );
 
   event Withdrawal(address indexed user, uint256 amount);
   event WithdrawalTo(address indexed user, address indexed to, uint256 amount);
 
   event VotingStarted(
-    uint256 indexed bountyId, uint256 indexed claimId, uint256 deadline, uint256 issuerYesWeight
+    uint256 indexed bountyId,
+    uint256 indexed claimId,
+    uint256 deadline,
+    uint256 issuerYesWeight,
+    uint256 round
   );
 
   event VoteCast(
@@ -344,7 +352,7 @@ contract PoidhV3 is ReentrancyGuard {
     if (msg.sender != tx.origin) revert ContractsCannotCreateBounties();
     if (msg.value == 0) revert NoEther();
     if (msg.value < MIN_BOUNTY_AMOUNT) revert MinimumBountyNotMet();
-    _createBounty(name, description);
+    _createBounty(name, description, false);
   }
 
   /// @notice Create an open bounty (multiple contributors; claim acceptance uses voting).
@@ -358,7 +366,7 @@ contract PoidhV3 is ReentrancyGuard {
     if (msg.value == 0) revert NoEther();
     if (msg.value < MIN_BOUNTY_AMOUNT) revert MinimumBountyNotMet();
 
-    uint256 bountyId = _createBounty(name, description);
+    uint256 bountyId = _createBounty(name, description, true);
 
     // issuer is always participant slot 0
     participants[bountyId].push(msg.sender);
@@ -367,7 +375,11 @@ contract PoidhV3 is ReentrancyGuard {
   }
 
   /// @dev Internal bounty creation shared by solo + open bounties.
-  function _createBounty(string calldata name, string calldata description)
+  function _createBounty(
+    string calldata name,
+    string calldata description,
+    bool isOpenBounty
+  )
     internal
     returns (uint256 bountyId)
   {
@@ -388,7 +400,9 @@ contract PoidhV3 is ReentrancyGuard {
     userBounties[msg.sender].push(bountyId);
     bountyCounter++;
 
-    emit BountyCreated(bountyId, msg.sender, name, description, msg.value, block.timestamp);
+    emit BountyCreated(
+      bountyId, msg.sender, name, description, msg.value, block.timestamp, isOpenBounty
+    );
   }
 
   /// =============================
@@ -440,7 +454,7 @@ contract PoidhV3 is ReentrancyGuard {
     everHadExternalContributor[bountyId] = true;
     bounty.amount += msg.value;
 
-    emit BountyJoined(bountyId, msg.sender, msg.value);
+    emit BountyJoined(bountyId, msg.sender, msg.value, bounty.amount);
   }
 
   /// @notice Withdraw the caller's entire contribution from an open bounty (credited to pending).
@@ -477,7 +491,7 @@ contract PoidhV3 is ReentrancyGuard {
 
     pendingWithdrawals[msg.sender] += amount;
 
-    emit WithdrawFromOpenBounty(bountyId, msg.sender, amount);
+    emit WithdrawFromOpenBounty(bountyId, msg.sender, amount, bounty.amount);
   }
 
   /// =================
@@ -594,7 +608,14 @@ contract PoidhV3 is ReentrancyGuard {
     claimCounter++;
 
     emit ClaimCreated(
-      claimId, msg.sender, bountyId, bounty.issuer, name, description, block.timestamp
+      claimId,
+      msg.sender,
+      bountyId,
+      bounty.issuer,
+      name,
+      description,
+      block.timestamp,
+      uri
     );
   }
 
@@ -645,9 +666,7 @@ contract PoidhV3 is ReentrancyGuard {
     // issuer auto-votes YES
     lastVotedRound[bountyId][msg.sender] = roundId;
 
-    emit ClaimSubmittedForVote(bountyId, claimId);
-    emit VotingStarted(bountyId, claimId, deadline, issuerWeight);
-    emit VoteCast(msg.sender, bountyId, claimId, true, issuerWeight);
+    emit VotingStarted(bountyId, claimId, deadline, issuerWeight, roundId);
   }
 
   /// @notice Vote for/against the currently submitted claim on an open bounty.
@@ -674,7 +693,6 @@ contract PoidhV3 is ReentrancyGuard {
     if (vote) v.yes += weight;
     else v.no += weight;
 
-    emit VoteClaim(msg.sender, bountyId, currentClaim); // legacy
     emit VoteCast(msg.sender, bountyId, currentClaim, vote, weight);
   }
 
@@ -698,7 +716,6 @@ contract PoidhV3 is ReentrancyGuard {
       bountyCurrentVotingClaim[bountyId] = 0;
       delete bountyVotingTracker[bountyId];
 
-      emit ResetVotingPeriod(bountyId);
       emit VotingResolved(bountyId, currentClaim, false, v.yes, v.no);
     }
   }
@@ -722,7 +739,6 @@ contract PoidhV3 is ReentrancyGuard {
     bountyCurrentVotingClaim[bountyId] = 0;
     delete bountyVotingTracker[bountyId];
 
-    emit ResetVotingPeriod(bountyId);
     emit VotingResolved(bountyId, currentClaim, false, v.yes, v.no);
   }
 

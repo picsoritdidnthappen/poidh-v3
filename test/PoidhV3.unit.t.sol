@@ -84,6 +84,26 @@ contract PoidhV3UnitTest is PoidhDeployHelper {
   address contributor;
   address contributor2;
 
+  bytes32 private constant BOUNTY_CREATED_SIG =
+    keccak256("BountyCreated(uint256,address,string,string,uint256,uint256,bool)");
+  bytes32 private constant CLAIM_CREATED_SIG =
+    keccak256("ClaimCreated(uint256,address,uint256,address,string,string,uint256,string)");
+  bytes32 private constant BOUNTY_JOINED_SIG =
+    keccak256("BountyJoined(uint256,address,uint256,uint256)");
+  bytes32 private constant WITHDRAW_FROM_OPEN_BOUNTY_SIG =
+    keccak256("WithdrawFromOpenBounty(uint256,address,uint256,uint256)");
+  bytes32 private constant VOTING_STARTED_SIG =
+    keccak256("VotingStarted(uint256,uint256,uint256,uint256,uint256)");
+  bytes32 private constant VOTE_CAST_SIG =
+    keccak256("VoteCast(address,uint256,uint256,bool,uint256)");
+  bytes32 private constant VOTING_RESOLVED_SIG =
+    keccak256("VotingResolved(uint256,uint256,bool,uint256,uint256)");
+
+  bytes32 private constant CLAIM_SUBMITTED_FOR_VOTE_SIG =
+    keccak256("ClaimSubmittedForVote(uint256,uint256)");
+  bytes32 private constant RESET_VOTING_PERIOD_SIG = keccak256("ResetVotingPeriod(uint256)");
+  bytes32 private constant VOTE_CLAIM_SIG = keccak256("VoteClaim(address,uint256,uint256)");
+
   function setUp() public {
     vm.txGasPrice(0);
 
@@ -629,5 +649,233 @@ contract PoidhV3UnitTest is PoidhDeployHelper {
     assertEq(poidh.pendingWithdrawals(address(r)), 0);
     assertEq(address(r).balance, 1 ether + pending);
     assertTrue(r.sawReentrancyError());
+  }
+
+  function test_event_bountyCreated_includes_isOpenBounty() public {
+    vm.recordLogs();
+    vm.prank(issuer, issuer);
+    uint256 soloTimestamp = block.timestamp;
+    poidh.createSoloBounty{value: 1 ether}("solo", "desc");
+
+    Vm.Log[] memory logs = vm.getRecordedLogs();
+    Vm.Log memory log = _findLog(logs, BOUNTY_CREATED_SIG);
+
+    assertEq(uint256(log.topics[1]), 0);
+    assertEq(address(uint160(uint256(log.topics[2]))), issuer);
+
+    (string memory title, string memory description, uint256 amount, uint256 createdAt, bool isOpen)
+    = abi.decode(log.data, (string, string, uint256, uint256, bool));
+
+    assertEq(title, "solo");
+    assertEq(description, "desc");
+    assertEq(amount, 1 ether);
+    assertEq(createdAt, soloTimestamp);
+    assertTrue(!isOpen);
+
+    vm.recordLogs();
+    vm.prank(issuer, issuer);
+    uint256 openTimestamp = block.timestamp;
+    poidh.createOpenBounty{value: 2 ether}("open", "desc2");
+
+    logs = vm.getRecordedLogs();
+    log = _findLog(logs, BOUNTY_CREATED_SIG);
+
+    assertEq(uint256(log.topics[1]), 1);
+    assertEq(address(uint160(uint256(log.topics[2]))), issuer);
+
+    (title, description, amount, createdAt, isOpen) =
+      abi.decode(log.data, (string, string, uint256, uint256, bool));
+
+    assertEq(title, "open");
+    assertEq(description, "desc2");
+    assertEq(amount, 2 ether);
+    assertEq(createdAt, openTimestamp);
+    assertTrue(isOpen);
+  }
+
+  function test_event_claimCreated_includes_imageUri() public {
+    vm.prank(issuer, issuer);
+    poidh.createSoloBounty{value: 1 ether}("solo", "desc");
+
+    vm.recordLogs();
+    vm.prank(claimant);
+    uint256 createdAt = block.timestamp;
+    poidh.createClaim(0, "claim", "desc", "ipfs://image");
+
+    Vm.Log[] memory logs = vm.getRecordedLogs();
+    Vm.Log memory log = _findLog(logs, CLAIM_CREATED_SIG);
+
+    assertEq(uint256(log.topics[1]), 1);
+    assertEq(address(uint160(uint256(log.topics[2]))), claimant);
+    assertEq(uint256(log.topics[3]), 0);
+
+    (
+      address bountyIssuer,
+      string memory title,
+      string memory description,
+      uint256 eventTimestamp,
+      string memory imageUri
+    ) = abi.decode(log.data, (address, string, string, uint256, string));
+
+    assertEq(bountyIssuer, issuer);
+    assertEq(title, "claim");
+    assertEq(description, "desc");
+    assertEq(eventTimestamp, createdAt);
+    assertEq(imageUri, "ipfs://image");
+  }
+
+  function test_event_bountyJoined_includes_latestBalance() public {
+    vm.prank(issuer, issuer);
+    poidh.createOpenBounty{value: 1 ether}("open", "desc");
+
+    vm.recordLogs();
+    vm.prank(contributor);
+    poidh.joinOpenBounty{value: 2 ether}(0);
+
+    Vm.Log[] memory logs = vm.getRecordedLogs();
+    Vm.Log memory log = _findLog(logs, BOUNTY_JOINED_SIG);
+
+    assertEq(uint256(log.topics[1]), 0);
+    assertEq(address(uint160(uint256(log.topics[2]))), contributor);
+
+    (uint256 amount, uint256 latestBountyBalance) =
+      abi.decode(log.data, (uint256, uint256));
+
+    assertEq(amount, 2 ether);
+    assertEq(latestBountyBalance, 3 ether);
+  }
+
+  function test_event_withdrawFromOpenBounty_includes_latestAmount() public {
+    vm.prank(issuer, issuer);
+    poidh.createOpenBounty{value: 1 ether}("open", "desc");
+
+    vm.prank(contributor);
+    poidh.joinOpenBounty{value: 2 ether}(0);
+
+    vm.recordLogs();
+    vm.prank(contributor);
+    poidh.withdrawFromOpenBounty(0);
+
+    Vm.Log[] memory logs = vm.getRecordedLogs();
+    Vm.Log memory log = _findLog(logs, WITHDRAW_FROM_OPEN_BOUNTY_SIG);
+
+    assertEq(uint256(log.topics[1]), 0);
+    assertEq(address(uint160(uint256(log.topics[2]))), contributor);
+
+    (uint256 amount, uint256 latestBountyAmount) =
+      abi.decode(log.data, (uint256, uint256));
+
+    assertEq(amount, 2 ether);
+    assertEq(latestBountyAmount, 1 ether);
+  }
+
+  function test_event_votingStarted_includes_round_and_no_legacy_events() public {
+    vm.prank(issuer, issuer);
+    poidh.createOpenBounty{value: 1 ether}("open", "desc");
+
+    vm.prank(contributor);
+    poidh.joinOpenBounty{value: 1 ether}(0);
+
+    vm.prank(claimant);
+    poidh.createClaim(0, "claim", "desc", "ipfs://x");
+
+    vm.recordLogs();
+    vm.prank(issuer);
+    uint256 expectedDeadline = block.timestamp + poidh.votingPeriod();
+    poidh.submitClaimForVote(0, 1);
+
+    Vm.Log[] memory logs = vm.getRecordedLogs();
+    Vm.Log memory log = _findLog(logs, VOTING_STARTED_SIG);
+
+    assertEq(uint256(log.topics[1]), 0);
+    assertEq(uint256(log.topics[2]), 1);
+
+    (uint256 deadline, uint256 issuerYesWeight, uint256 round) =
+      abi.decode(log.data, (uint256, uint256, uint256));
+
+    assertEq(deadline, expectedDeadline);
+    assertEq(issuerYesWeight, 1 ether);
+    assertEq(round, 1);
+
+    _assertNoLog(logs, CLAIM_SUBMITTED_FOR_VOTE_SIG);
+    _assertNoLog(logs, VOTE_CAST_SIG);
+  }
+
+  function test_event_voteClaim_emits_voteCast_and_no_voteClaim() public {
+    vm.prank(issuer, issuer);
+    poidh.createOpenBounty{value: 1 ether}("open", "desc");
+
+    vm.prank(contributor);
+    poidh.joinOpenBounty{value: 1 ether}(0);
+
+    vm.prank(claimant);
+    poidh.createClaim(0, "claim", "desc", "ipfs://x");
+
+    vm.prank(issuer);
+    poidh.submitClaimForVote(0, 1);
+
+    vm.recordLogs();
+    vm.prank(contributor);
+    poidh.voteClaim(0, true);
+
+    Vm.Log[] memory logs = vm.getRecordedLogs();
+    Vm.Log memory log = _findLog(logs, VOTE_CAST_SIG);
+
+    assertEq(address(uint160(uint256(log.topics[1]))), contributor);
+    assertEq(uint256(log.topics[2]), 0);
+    assertEq(uint256(log.topics[3]), 1);
+
+    (bool support, uint256 weight) = abi.decode(log.data, (bool, uint256));
+    assertTrue(support);
+    assertEq(weight, 1 ether);
+
+    _assertNoLog(logs, VOTE_CLAIM_SIG);
+  }
+
+  function test_event_resetVotingPeriod_emits_no_reset_event() public {
+    vm.prank(issuer, issuer);
+    poidh.createOpenBounty{value: 1 ether}("open", "desc");
+
+    vm.prank(contributor);
+    poidh.joinOpenBounty{value: 1 ether}(0);
+
+    vm.prank(claimant);
+    poidh.createClaim(0, "claim", "desc", "ipfs://x");
+
+    vm.prank(issuer);
+    poidh.submitClaimForVote(0, 1);
+
+    vm.prank(contributor);
+    poidh.voteClaim(0, false);
+
+    vm.warp(block.timestamp + poidh.votingPeriod());
+
+    vm.recordLogs();
+    poidh.resetVotingPeriod(0);
+
+    Vm.Log[] memory logs = vm.getRecordedLogs();
+    _assertNoLog(logs, RESET_VOTING_PERIOD_SIG);
+
+    Vm.Log memory log = _findLog(logs, VOTING_RESOLVED_SIG);
+    (bool passed, uint256 yes, uint256 no) = abi.decode(log.data, (bool, uint256, uint256));
+    assertTrue(!passed);
+    assertEq(yes + no, 2 ether);
+  }
+
+  function _findLog(Vm.Log[] memory logs, bytes32 sig) internal pure returns (Vm.Log memory) {
+    for (uint256 i = 0; i < logs.length; i++) {
+      if (logs[i].topics.length > 0 && logs[i].topics[0] == sig) {
+        return logs[i];
+      }
+    }
+    revert("log not found");
+  }
+
+  function _assertNoLog(Vm.Log[] memory logs, bytes32 sig) internal pure {
+    for (uint256 i = 0; i < logs.length; i++) {
+      if (logs[i].topics.length > 0 && logs[i].topics[0] == sig) {
+        revert("unexpected log");
+      }
+    }
   }
 }

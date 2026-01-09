@@ -43,10 +43,10 @@ Chain defaults (deployment scripts):
 
 ### 1) Create Solo Bounty
 
-**UX:** “Create bounty (solo)” form with name, description, amount.
+**UX:** “Create bounty (solo)” form with title, description, amount.
 
 **Calls:**
-- `PoidhV3.createSoloBounty(name, description)` with `msg.value >= MIN_BOUNTY_AMOUNT`
+- `PoidhV3.createSoloBounty(title, description)` with `msg.value >= MIN_BOUNTY_AMOUNT`
 
 **Guards:**
 - EOAs only (`msg.sender == tx.origin`)
@@ -57,10 +57,10 @@ Chain defaults (deployment scripts):
 
 ### 2) Create Open Bounty
 
-**UX:** “Create bounty (open)” with name, description, amount.
+**UX:** “Create bounty (open)” with title, description, amount.
 
 **Calls:**
-- `PoidhV3.createOpenBounty(name, description)` with `msg.value >= MIN_BOUNTY_AMOUNT`
+- `PoidhV3.createOpenBounty(title, description)` with `msg.value >= MIN_BOUNTY_AMOUNT`
 
 **Effects:**
 - Issuer is the first participant (slot 0) with the initial amount.
@@ -81,7 +81,7 @@ Chain defaults (deployment scripts):
 - `msg.sender` cannot be the issuer.
 
 **Events:**
-- `BountyJoined`
+- `BountyJoined` (includes `latestBountyBalance`)
 
 ### 4) Withdraw From Open Bounty
 
@@ -92,7 +92,7 @@ Chain defaults (deployment scripts):
 - Then `PoidhV3.withdraw()` or `withdrawTo(address)`
 
 **Events:**
-- `WithdrawFromOpenBounty`
+- `WithdrawFromOpenBounty` (includes `latestBountyAmount`)
 - `Withdrawal` / `WithdrawalTo`
 
 ### 5) Create Claim (for any active bounty)
@@ -100,13 +100,13 @@ Chain defaults (deployment scripts):
 **UX:** “Submit claim” with title, description, and proof URI.
 
 **Calls:**
-- `PoidhV3.createClaim(bountyId, name, description, uri)`
+- `PoidhV3.createClaim(bountyId, title, description, imageUri)`
 
 **Effects:**
 - Claim NFT minted to escrow (`PoidhV3`) via `PoidhClaimNFT.mintToEscrow`.
 
 **Events:**
-- `ClaimCreated`
+- `ClaimCreated` (includes `imageUri`)
 
 ### 6) Accept Claim (Solo or Open-But-Never-External)
 
@@ -140,8 +140,7 @@ contributors).
 - Voting deadline = `block.timestamp + votingPeriod`.
 
 **Events:**
-- `ClaimSubmittedForVote`
-- `VotingStarted`
+- `VotingStarted` (includes `round`)
 
 ### 8) Vote on Claim
 
@@ -157,7 +156,6 @@ contributors).
 
 **Events:**
 - `VoteCast`
-- `VoteClaim` (legacy/indexer compatibility)
 
 ### 9) Resolve Vote
 
@@ -190,7 +188,6 @@ ABI/indexer compatibility; most integrations can just call `resolveVote`.
 - Clears the current voting claim and tracker (same end-state as a rejected `resolveVote`).
 
 **Events:**
-- `ResetVotingPeriod`
 - `VotingResolved`
 
 ### 10) Cancel Bounty
@@ -296,11 +293,18 @@ sequenceDiagram
 
 - `BountyCreated` (new bounty)
 - `ClaimCreated` (new claim)
-- `ClaimSubmittedForVote`, `VotingStarted`, `VoteCast`, `VotingResolved`
+- `VotingStarted`, `VoteCast`, `VotingResolved`
 - `ClaimAccepted`
 - `BountyCancelled`, `RefundClaimed`
 - `WithdrawFromOpenBounty`, `Withdrawal`, `WithdrawalTo`
 - `Transfer` events from `PoidhClaimNFT` (escrow mint + final transfer)
+
+### Event Payload Notes
+
+- `BountyCreated` includes `isOpenBounty` and the bounty `title`.
+- `ClaimCreated` includes `imageUri`.
+- `BountyJoined` and `WithdrawFromOpenBounty` include the latest bounty amount after the change.
+- `VotingStarted` includes `round` and the issuer's auto-yes weight.
 
 ### Read Helpers (Pagination)
 
