@@ -11,6 +11,7 @@ export default defineConfig({
       { text: 'State Machines', link: '/state-machines' },
       { text: 'Security', link: '/security' },
       { text: 'API', link: '/api' },
+      { text: 'Deployment', link: '/deployment' },
     ],
 
     sidebar: [
@@ -33,13 +34,7 @@ export default defineConfig({
 
     search: {
       provider: 'local'
-    },
-
-    // Dark mode by default
-    darkMode: 'dark',
-    
-    // Clean, minimal appearance
-    appearance: 'dark'
+    }
   },
 
   // Custom head for mermaid

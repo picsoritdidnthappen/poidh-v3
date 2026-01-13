@@ -1,3 +1,7 @@
+---
+page: true
+---
+
 # POIDH v3 Documentation
 
 A **security-focused rebuild** of the POIDH v2 bounty contracts featuring solo and open bounties with weighted voting and pull-payments.

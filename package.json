@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@coinbase/coinbase-sdk": "^0.25.0"
+    "@coinbase/coinbase-sdk": "^0.25.0",
+    "markdown-it-mermaid": "^0.2.5"
   }
 }
