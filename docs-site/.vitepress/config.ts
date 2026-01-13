@@ -46,10 +46,6 @@ export default defineConfig({
     theme: {
       light: 'github-light',
       dark: 'github-dark'
-    },
-    config: (md) => {
-      // Add support for mermaid diagrams
-      md.use(require('markdown-it-mermaid'))
     }
   },
 
