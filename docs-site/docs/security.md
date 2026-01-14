@@ -264,7 +264,7 @@ If vulnerability discovered:
 
 **Recommendation**: Obtain professional audit before mainnet deployment with significant value.
 
-**Self-Review**: Comprehensive security review conducted, documented in `docs/POIDH_V3_SECURITY_REPORT.md`
+**Self-Review**: Comprehensive security review conducted, documented in [docs/POIDH_V3_SECURITY_REPORT.md`](https://github.com/picsoritdidnthappen/poidh-v3/blob/main/docs/POIDH_V3_SECURITY_REPORT.md)
 
 ## Additional Resources
 
