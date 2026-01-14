@@ -39,6 +39,7 @@ export default defineConfig({
 
   // Custom head for mermaid
   head: [
+    ['link', { rel: 'icon', type: 'image/png', href: '/poidh-favicon.png' }],
     ['script', { src: 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js' }]
   ],
 
