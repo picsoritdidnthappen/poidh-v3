@@ -29,7 +29,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/picsoritdidnthappen/poidh-contracts' }
+      { icon: 'github', link: 'https://github.com/picsoritdidnthappen/poidh-v3' }
     ],
 
     search: {
