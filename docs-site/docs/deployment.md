@@ -163,9 +163,9 @@ cast balance <CONTRACT_ADDRESS> --rpc-url $RPC_URL
 
 | Chain | Contract Address | Deployment Date |
 |-------|------------------|-----------------|
-| Arbitrum | 0xF3872201171A0fF0a6e789627583E8036C41Baec | Jan-11-2026 |
-| Base | 0xF3872201171A0fF0a6e789627583E8036C41Baec | Jan-11-2026 |
-| Degen Chain | 0x0285626130C127741C18C7730625ca624B727DC3 | Jan-11-2026 |
+| Arbitrum | [0xF3872201171A0fF0a6e789627583E8036C41Baec](https://arbiscan.io/address/0xF3872201171A0fF0a6e789627583E8036C41Baec) | Jan-11-2026 |
+| Base | [0xF3872201171A0fF0a6e789627583E8036C41Baec](https://basescan.org/address/0xF3872201171A0fF0a6e789627583E8036C41Baec) | Jan-11-2026 |
+| Degen Chain | [0x0285626130C127741C18C7730625ca624B727DC3](https://explorer.degen.tips/address/0x0285626130C127741C18C7730625ca624B727DC3) | Jan-11-2026 |
 
 ### Testnet
 
