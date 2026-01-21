@@ -229,35 +229,6 @@ graph LR
 - Multi-sig treasury recommended
 - Clear documentation of parameters
 
-## Security Checklist
-
-### Pre-Deployment
-
-- [x] All tests passing
-- [x] 95%+ code coverage
-- [x] Fuzz tests run with 10,000+ runs
-- [x] Invariant tests run with 2,000+ runs
-- [x] Manual code review completed
-- [x] Security report reviewed
-
-### Post-Deployment
-
-- [ ] Monitor for unusual activity
-- [ ] Watch for gas spikes
-- [ ] Track bounty/claim volumes
-- [ ] Monitor voting patterns
-- [ ] Audit trail for all transactions
-
-### Incident Response
-
-If vulnerability discovered:
-
-1. Pause protocol (if pause mechanism added)
-2. Alert community
-3. Deploy fix
-4. Migrate to new contract
-5. Post-mortem
-
 ## Audit Status
 
 **Status**: Not audited by professional firm
@@ -268,7 +239,7 @@ If vulnerability discovered:
 
 ## Additional Resources
 
-- Security Report: Available in project docs
-- Mainnet Readiness: Available in project docs
-- Test Results: Available in project docs
+- Security Report: Available via GitHub
+- Mainnet Readiness: Available via GitHub
+- Test Results: Available via GitHub
 - Vulnerability Reporting: See SECURITY.md in project root
