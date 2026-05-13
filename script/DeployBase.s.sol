@@ -30,6 +30,8 @@ abstract contract DeployBaseScript is Script {
     cfg.startClaimIndex = vm.envOr("POIDH_START_CLAIM_INDEX", uint256(1));
     cfg.nftName = vm.envOr("POIDH_NFT_NAME", string("poidh claims v3"));
     cfg.nftSymbol = vm.envOr("POIDH_NFT_SYMBOL", string("POIDH3"));
+    cfg.minBountyAmount = vm.envOr("POIDH_MIN_BOUNTY_AMOUNT", uint256(0.0001 ether));
+    cfg.minContribution = vm.envOr("POIDH_MIN_CONTRIBUTION", uint256(0.0001 ether));
   }
 
   function _deploy(DeployConfig memory cfg) internal {
