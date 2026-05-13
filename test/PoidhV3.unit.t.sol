@@ -782,8 +782,8 @@ contract PoidhV3UnitTest is PoidhDeployHelper {
     poidh.createClaim(0, "claim", "desc", "ipfs://x");
 
     vm.recordLogs();
-    vm.prank(issuer);
     uint256 expectedDeadline = block.timestamp + poidh.votingPeriod();
+    vm.prank(issuer, issuer);
     poidh.submitClaimForVote(0, 1);
 
     Vm.Log[] memory logs = vm.getRecordedLogs();
