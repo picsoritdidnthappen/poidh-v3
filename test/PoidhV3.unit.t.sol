@@ -2,6 +2,7 @@
 pragma solidity ^0.8.24;
 
 import {PoidhDeployHelper} from "./utils/PoidhDeployHelper.sol";
+import {Vm} from "forge-std/Vm.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import {PoidhV3} from "../src/PoidhV3.sol";
 import {PoidhClaimNFT} from "../src/PoidhClaimNFT.sol";
@@ -85,19 +86,19 @@ contract PoidhV3UnitTest is PoidhDeployHelper {
   address contributor2;
 
   bytes32 private constant BOUNTY_CREATED_SIG =
-    keccak256("BountyCreated(uint256,address,string,string,uint256,uint256,bool)");
+    keccak256("BountyCreated(uint256,address,string,string,uint256,uint256,bool,uint256)");
   bytes32 private constant CLAIM_CREATED_SIG =
-    keccak256("ClaimCreated(uint256,address,uint256,address,string,string,uint256,string)");
+    keccak256("ClaimCreated(uint256,address,uint256,address,string,string,uint256,string,uint256)");
   bytes32 private constant BOUNTY_JOINED_SIG =
-    keccak256("BountyJoined(uint256,address,uint256,uint256)");
+    keccak256("BountyJoined(uint256,address,uint256,uint256,uint256)");
   bytes32 private constant WITHDRAW_FROM_OPEN_BOUNTY_SIG =
-    keccak256("WithdrawFromOpenBounty(uint256,address,uint256,uint256)");
+    keccak256("WithdrawFromOpenBounty(uint256,address,uint256,uint256,uint256)");
   bytes32 private constant VOTING_STARTED_SIG =
     keccak256("VotingStarted(uint256,uint256,uint256,uint256,uint256)");
   bytes32 private constant VOTE_CAST_SIG =
-    keccak256("VoteCast(address,uint256,uint256,bool,uint256)");
+    keccak256("VoteCast(address,uint256,uint256,bool,uint256,uint256)");
   bytes32 private constant VOTING_RESOLVED_SIG =
-    keccak256("VotingResolved(uint256,uint256,bool,uint256,uint256)");
+    keccak256("VotingResolved(uint256,uint256,bool,uint256,uint256,uint256)");
 
   bytes32 private constant CLAIM_SUBMITTED_FOR_VOTE_SIG =
     keccak256("ClaimSubmittedForVote(uint256,uint256)");
@@ -663,8 +664,8 @@ contract PoidhV3UnitTest is PoidhDeployHelper {
     assertEq(uint256(log.topics[1]), 0);
     assertEq(address(uint160(uint256(log.topics[2]))), issuer);
 
-    (string memory title, string memory description, uint256 amount, uint256 createdAt, bool isOpen)
-    = abi.decode(log.data, (string, string, uint256, uint256, bool));
+    (string memory title, string memory description, uint256 amount, uint256 createdAt, bool isOpen, uint256 _r1)
+    = abi.decode(log.data, (string, string, uint256, uint256, bool, uint256));
 
     assertEq(title, "solo");
     assertEq(description, "desc");
@@ -683,8 +684,8 @@ contract PoidhV3UnitTest is PoidhDeployHelper {
     assertEq(uint256(log.topics[1]), 1);
     assertEq(address(uint160(uint256(log.topics[2]))), issuer);
 
-    (title, description, amount, createdAt, isOpen) =
-      abi.decode(log.data, (string, string, uint256, uint256, bool));
+    (title, description, amount, createdAt, isOpen, _r1) =
+      abi.decode(log.data, (string, string, uint256, uint256, bool, uint256));
 
     assertEq(title, "open");
     assertEq(description, "desc2");
@@ -714,8 +715,9 @@ contract PoidhV3UnitTest is PoidhDeployHelper {
       string memory title,
       string memory description,
       uint256 eventTimestamp,
-      string memory imageUri
-    ) = abi.decode(log.data, (address, string, string, uint256, string));
+      string memory imageUri,
+      uint256 _r2
+    ) = abi.decode(log.data, (address, string, string, uint256, string, uint256));
 
     assertEq(bountyIssuer, issuer);
     assertEq(title, "claim");
@@ -738,8 +740,8 @@ contract PoidhV3UnitTest is PoidhDeployHelper {
     assertEq(uint256(log.topics[1]), 0);
     assertEq(address(uint160(uint256(log.topics[2]))), contributor);
 
-    (uint256 amount, uint256 latestBountyBalance) =
-      abi.decode(log.data, (uint256, uint256));
+    (uint256 amount, uint256 latestBountyBalance, uint256 _r3) =
+      abi.decode(log.data, (uint256, uint256, uint256));
 
     assertEq(amount, 2 ether);
     assertEq(latestBountyBalance, 3 ether);
@@ -762,8 +764,8 @@ contract PoidhV3UnitTest is PoidhDeployHelper {
     assertEq(uint256(log.topics[1]), 0);
     assertEq(address(uint160(uint256(log.topics[2]))), contributor);
 
-    (uint256 amount, uint256 latestBountyAmount) =
-      abi.decode(log.data, (uint256, uint256));
+    (uint256 amount, uint256 latestBountyAmount, uint256 _r4) =
+      abi.decode(log.data, (uint256, uint256, uint256));
 
     assertEq(amount, 2 ether);
     assertEq(latestBountyAmount, 1 ether);
@@ -825,7 +827,7 @@ contract PoidhV3UnitTest is PoidhDeployHelper {
     assertEq(uint256(log.topics[2]), 0);
     assertEq(uint256(log.topics[3]), 1);
 
-    (bool support, uint256 weight) = abi.decode(log.data, (bool, uint256));
+    (bool support, uint256 weight, uint256 _r5) = abi.decode(log.data, (bool, uint256, uint256));
     assertTrue(support);
     assertEq(weight, 1 ether);
 
@@ -857,7 +859,7 @@ contract PoidhV3UnitTest is PoidhDeployHelper {
     _assertNoLog(logs, RESET_VOTING_PERIOD_SIG);
 
     Vm.Log memory log = _findLog(logs, VOTING_RESOLVED_SIG);
-    (bool passed, uint256 yes, uint256 no) = abi.decode(log.data, (bool, uint256, uint256));
+    (bool passed, uint256 yes, uint256 no, uint256 _r6) = abi.decode(log.data, (bool, uint256, uint256, uint256));
     assertTrue(!passed);
     assertEq(yes + no, 2 ether);
   }
