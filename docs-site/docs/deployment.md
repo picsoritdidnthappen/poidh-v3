@@ -141,9 +141,10 @@ cast balance <CONTRACT_ADDRESS> --rpc-url $RPC_URL
 
 | Chain | MIN_BOUNTY_AMOUNT | MIN_CONTRIBUTION |
 |-------|-------------------|------------------|
-| Base | 0.001 ETH | 0.00001 ETH |
 | Arbitrum | 0.001 ETH | 0.00001 ETH |
+| Base | 0.001 ETH | 0.00001 ETH |
 | Degenchain | 1000 DEGEN | 10 DEGEN |
+| Ethereum Mainnet | 0.001 ETH | 0.00001 ETH |
 
 ### Voting Period
 
@@ -166,6 +167,7 @@ cast balance <CONTRACT_ADDRESS> --rpc-url $RPC_URL
 | Arbitrum | [0x5555Fa783936C260f77385b4E153B9725feF1719](https://arbiscan.io/address/0x5555fa783936c260f77385b4e153b9725fef1719) | Jan-19-2026 |
 | Base | [0x5555Fa783936C260f77385b4E153B9725feF1719](https://basescan.org/address/0x5555fa783936c260f77385b4e153b9725fef1719) | Jan-19-2026 |
 | Degen Chain | [0x18E5585ca7cE31b90Bc8BB7aAf84152857cE243f](https://explorer.degen.tips/address/0x18e5585ca7ce31b90bc8bb7aaf84152857ce243f) | Jan-19-2026 |
+| Ethereum Mainnet | [0xE731dFadBFf20542E10D09D26Fc71445C70d4232](https://etherscan.io/address/0xE731dFadBFf20542E10D09D26Fc71445C70d4232) | Jan-19-2026 |
 
 ### Testnet
 
