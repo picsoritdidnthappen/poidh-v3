@@ -111,7 +111,7 @@ contract PoidhV3 is ReentrancyGuard {
     voteWeightSnapshot;
 
   /// @notice The round id that a snapshot entry belongs to.
-  /// @dev This fixes the “stale snapshot” issue: old weights cannot be reused in later rounds.
+  /// @dev This fixes the "stale snapshot" issue: old weights cannot be reused in later rounds.
   mapping(uint256 bountyId => mapping(address participant => uint256 roundId)) private
     voteWeightSnapshotRound;
 
@@ -128,7 +128,8 @@ contract PoidhV3 is ReentrancyGuard {
     string description,
     uint256 amount,
     uint256 createdAt,
-    bool isOpenBounty
+    bool isOpenBounty,
+    uint256 round
   );
 
   event ClaimCreated(
@@ -139,7 +140,8 @@ contract PoidhV3 is ReentrancyGuard {
     string title,
     string description,
     uint256 createdAt,
-    string imageUri
+    string imageUri,
+    uint256 round
   );
 
   event ClaimAccepted(
@@ -149,21 +151,24 @@ contract PoidhV3 is ReentrancyGuard {
     address bountyIssuer,
     uint256 bountyAmount,
     uint256 payout,
-    uint256 fee
+    uint256 fee,
+    uint256 round
   );
 
   event BountyJoined(
     uint256 indexed bountyId,
     address indexed participant,
     uint256 amount,
-    uint256 latestBountyBalance
+    uint256 latestBountyBalance,
+    uint256 round
   );
-  event BountyCancelled(uint256 indexed bountyId, address indexed issuer, uint256 issuerRefund);
+  event BountyCancelled(uint256 indexed bountyId, address indexed issuer, uint256 issuerRefund, uint256 round);
   event WithdrawFromOpenBounty(
     uint256 indexed bountyId,
     address indexed participant,
     uint256 amount,
-    uint256 latestBountyAmount
+    uint256 latestBountyAmount,
+    uint256 round
   );
 
   event Withdrawal(address indexed user, uint256 amount);
@@ -182,14 +187,15 @@ contract PoidhV3 is ReentrancyGuard {
     uint256 indexed bountyId,
     uint256 indexed claimId,
     bool support,
-    uint256 weight
+    uint256 weight,
+    uint256 round
   );
 
   event VotingResolved(
-    uint256 indexed bountyId, uint256 indexed claimId, bool passed, uint256 yes, uint256 no
+    uint256 indexed bountyId, uint256 indexed claimId, bool passed, uint256 yes, uint256 no, uint256 round
   );
 
-  event RefundClaimed(uint256 indexed bountyId, address indexed participant, uint256 amount);
+  event RefundClaimed(uint256 indexed bountyId, address indexed participant, uint256 amount, uint256 round);
 
   /// =================
   /// === Errors     ===
@@ -288,7 +294,6 @@ contract PoidhV3 is ReentrancyGuard {
     MIN_BOUNTY_AMOUNT = _minBountyAmount;
     MIN_CONTRIBUTION = _minContribution;
 
-    // Reserve claimId 0..(_startClaimIndex-1) as sentinels by pre-filling.
     claimCounter = _startClaimIndex;
     for (uint256 i = 0; i < _startClaimIndex; i++) {
       claims.push(
@@ -368,10 +373,9 @@ contract PoidhV3 is ReentrancyGuard {
 
     uint256 bountyId = _createBounty(name, description, true);
 
-    // issuer is always participant slot 0
     participants[bountyId].push(msg.sender);
     participantAmounts[bountyId].push(msg.value);
-    contributorIndexPlus1[bountyId][msg.sender] = 1; // index 0 => store 1
+    contributorIndexPlus1[bountyId][msg.sender] = 1;
   }
 
   /// @dev Internal bounty creation shared by solo + open bounties.
@@ -401,7 +405,7 @@ contract PoidhV3 is ReentrancyGuard {
     bountyCounter++;
 
     emit BountyCreated(
-      bountyId, msg.sender, name, description, msg.value, block.timestamp, isOpenBounty
+      bountyId, msg.sender, name, description, msg.value, block.timestamp, isOpenBounty, voteRound[bountyId]
     );
   }
 
@@ -423,29 +427,22 @@ contract PoidhV3 is ReentrancyGuard {
     uint256 idxPlus1 = contributorIndexPlus1[bountyId][msg.sender];
 
     if (idxPlus1 == 0) {
-      // New contributor: reuse a free slot if possible, otherwise append.
       uint256 idx;
-
       uint256[] storage freeSlots = freeParticipantSlots[bountyId];
       if (freeSlots.length > 0) {
         idx = freeSlots[freeSlots.length - 1];
         freeSlots.pop();
-
-        // slot must be vacant
         participants[bountyId][idx] = msg.sender;
         participantAmounts[bountyId][idx] = msg.value;
       } else {
         address[] storage p = participants[bountyId];
         if (p.length >= MAX_PARTICIPANTS) revert MaxParticipantsReached();
-
         p.push(msg.sender);
         participantAmounts[bountyId].push(msg.value);
         idx = p.length - 1;
       }
-
       contributorIndexPlus1[bountyId][msg.sender] = idx + 1;
     } else {
-      // Existing active contributor: add to their existing slot.
       uint256 idx = idxPlus1 - 1;
       if (participants[bountyId][idx] != msg.sender) revert NotActiveParticipant();
       participantAmounts[bountyId][idx] += msg.value;
@@ -454,7 +451,7 @@ contract PoidhV3 is ReentrancyGuard {
     everHadExternalContributor[bountyId] = true;
     bounty.amount += msg.value;
 
-    emit BountyJoined(bountyId, msg.sender, msg.value, bounty.amount);
+    emit BountyJoined(bountyId, msg.sender, msg.value, bounty.amount, voteRound[bountyId]);
   }
 
   /// @notice Withdraw the caller's entire contribution from an open bounty (credited to pending).
@@ -474,24 +471,16 @@ contract PoidhV3 is ReentrancyGuard {
     uint256 amount = participantAmounts[bountyId][idx];
     if (amount == 0) revert NotActiveParticipant();
 
-    // Effects
     participantAmounts[bountyId][idx] = 0;
     participants[bountyId][idx] = address(0);
     bounty.amount -= amount;
 
-    // Free slot can be reused by someone else later.
     if (idx != 0) freeParticipantSlots[bountyId].push(idx);
-
-    // Clear index mapping so this address is treated as "new" if it rejoins later.
     contributorIndexPlus1[bountyId][msg.sender] = 0;
-
-    // Optional hygiene (not required for safety due to round-scoped snapshot):
-    // voteWeightSnapshot[bountyId][msg.sender] = 0;
-    // voteWeightSnapshotRound[bountyId][msg.sender] = 0;
 
     pendingWithdrawals[msg.sender] += amount;
 
-    emit WithdrawFromOpenBounty(bountyId, msg.sender, amount, bounty.amount);
+    emit WithdrawFromOpenBounty(bountyId, msg.sender, amount, bounty.amount, voteRound[bountyId]);
   }
 
   /// =================
@@ -506,14 +495,12 @@ contract PoidhV3 is ReentrancyGuard {
     if (msg.sender != bounty.issuer) revert WrongCaller();
 
     uint256 amount = bounty.amount;
-
-    // Effects
     bounty.claimer = bounty.issuer;
     bounty.amount = 0;
 
     pendingWithdrawals[msg.sender] += amount;
 
-    emit BountyCancelled(bountyId, msg.sender, amount);
+    emit BountyCancelled(bountyId, msg.sender, amount, voteRound[bountyId]);
   }
 
   /// @notice Cancel an open bounty in constant time; contributors must claim refunds themselves.
@@ -524,10 +511,8 @@ contract PoidhV3 is ReentrancyGuard {
     Bounty storage bounty = bounties[bountyId];
     if (msg.sender != bounty.issuer) revert WrongCaller();
 
-    // Effects: close first
     bounty.claimer = bounty.issuer;
 
-    // Refund issuer immediately (slot 0)
     uint256 issuerAmount = participantAmounts[bountyId][0];
     if (issuerAmount > 0) {
       participantAmounts[bountyId][0] = 0;
@@ -536,7 +521,7 @@ contract PoidhV3 is ReentrancyGuard {
       pendingWithdrawals[bounty.issuer] += issuerAmount;
     }
 
-    emit BountyCancelled(bountyId, msg.sender, issuerAmount);
+    emit BountyCancelled(bountyId, msg.sender, issuerAmount, voteRound[bountyId]);
   }
 
   /// @notice Claim the caller's refund from a cancelled open bounty (credited to pending).
@@ -559,13 +544,12 @@ contract PoidhV3 is ReentrancyGuard {
     participants[bountyId][idx] = address(0);
     bounty.amount -= amount;
 
-    // slot hygiene
     if (idx != 0) freeParticipantSlots[bountyId].push(idx);
     contributorIndexPlus1[bountyId][msg.sender] = 0;
 
     pendingWithdrawals[msg.sender] += amount;
 
-    emit RefundClaimed(bountyId, msg.sender, amount);
+    emit RefundClaimed(bountyId, msg.sender, amount, voteRound[bountyId]);
   }
 
   /// =====================
@@ -581,17 +565,18 @@ contract PoidhV3 is ReentrancyGuard {
   ) external nonReentrant {
     _requireActiveBounty(bountyId);
 
-    Bounty memory bounty = bounties[bountyId];
-    if (msg.sender == bounty.issuer) revert IssuerCannotClaim();
+    address bountyIssuer = bounties[bountyId].issuer;
+    if (msg.sender == bountyIssuer) revert IssuerCannotClaim();
 
     uint256 claimId = claimCounter;
+    uint256 round = voteRound[bountyId];
 
     claims.push(
       Claim({
         id: claimId,
         issuer: msg.sender,
         bountyId: bountyId,
-        bountyIssuer: bounty.issuer,
+        bountyIssuer: bountyIssuer,
         name: name,
         description: description,
         createdAt: block.timestamp,
@@ -599,7 +584,6 @@ contract PoidhV3 is ReentrancyGuard {
       })
     );
 
-    // Mint claim NFT to escrow (this contract) via the PoidhClaimNFT contract.
     poidhNft.mintToEscrow(claimId, uri);
 
     userClaims[msg.sender].push(claimId);
@@ -611,11 +595,12 @@ contract PoidhV3 is ReentrancyGuard {
       claimId,
       msg.sender,
       bountyId,
-      bounty.issuer,
+      bountyIssuer,
       name,
       description,
       block.timestamp,
-      uri
+      uri,
+      round
     );
   }
 
@@ -623,8 +608,7 @@ contract PoidhV3 is ReentrancyGuard {
   /// === Voting (Open)  ===
   /// =====================
   /// @notice Start a new vote round on an open bounty claim (issuer-only).
-  /// @dev Snapshots contribution weights at the moment voting starts; joins/withdrawals are
-  /// blocked.
+  /// @dev Snapshots contribution weights at the moment voting starts; joins/withdrawals are blocked.
   function submitClaimForVote(uint256 bountyId, uint256 claimId) external nonReentrant {
     _requireActiveBounty(bountyId);
     _requireOpenBounty(bountyId);
@@ -639,11 +623,9 @@ contract PoidhV3 is ReentrancyGuard {
     if (claim.bountyId != bountyId) revert ClaimNotFound();
     if (claim.accepted) revert ClaimAlreadyAccepted();
 
-    // Start new round
     voteRound[bountyId] += 1;
     uint256 roundId = voteRound[bountyId];
 
-    // Snapshot participant weights (round-scoped to prevent stale reuse)
     address[] memory p = participants[bountyId];
     uint256[] memory amounts = participantAmounts[bountyId];
 
@@ -663,7 +645,6 @@ contract PoidhV3 is ReentrancyGuard {
     uint256 deadline = block.timestamp + votingPeriod;
     bountyVotingTracker[bountyId] = Votes({yes: issuerWeight, no: 0, deadline: deadline});
 
-    // issuer auto-votes YES
     lastVotedRound[bountyId][msg.sender] = roundId;
 
     emit VotingStarted(bountyId, claimId, deadline, issuerWeight, roundId);
@@ -680,25 +661,22 @@ contract PoidhV3 is ReentrancyGuard {
     uint256 roundId = voteRound[bountyId];
     if (lastVotedRound[bountyId][msg.sender] == roundId) revert AlreadyVoted();
 
-    // IMPORTANT: round-scoped snapshot check prevents stale weight reuse across rounds.
     if (voteWeightSnapshotRound[bountyId][msg.sender] != roundId) revert NotActiveParticipant();
 
     uint256 weight = voteWeightSnapshot[bountyId][msg.sender];
     if (weight == 0) revert NotActiveParticipant();
 
-    // Effects
     lastVotedRound[bountyId][msg.sender] = roundId;
 
     Votes storage v = bountyVotingTracker[bountyId];
     if (vote) v.yes += weight;
     else v.no += weight;
 
-    emit VoteCast(msg.sender, bountyId, currentClaim, vote, weight);
+    emit VoteCast(msg.sender, bountyId, currentClaim, vote, weight, roundId);
   }
 
   /// @notice Resolve a vote after its deadline (permissionless).
-  /// @dev If the vote passes, accepts the claim (finalizes state, credits withdrawals, transfers
-  /// NFT).
+  /// @dev If the vote passes, accepts the claim (finalizes state, credits withdrawals, transfers NFT).
   function resolveVote(uint256 bountyId) external nonReentrant {
     if (participants[bountyId].length == 0) revert NotOpenBounty();
 
@@ -715,8 +693,7 @@ contract PoidhV3 is ReentrancyGuard {
     } else {
       bountyCurrentVotingClaim[bountyId] = 0;
       delete bountyVotingTracker[bountyId];
-
-      emit VotingResolved(bountyId, currentClaim, false, v.yes, v.no);
+      emit VotingResolved(bountyId, currentClaim, false, v.yes, v.no, voteRound[bountyId]);
     }
   }
 
@@ -739,14 +716,13 @@ contract PoidhV3 is ReentrancyGuard {
     bountyCurrentVotingClaim[bountyId] = 0;
     delete bountyVotingTracker[bountyId];
 
-    emit VotingResolved(bountyId, currentClaim, false, v.yes, v.no);
+    emit VotingResolved(bountyId, currentClaim, false, v.yes, v.no, voteRound[bountyId]);
   }
 
   /// =====================
   /// === Acceptance     ===
   /// =====================
-  /// @notice Accept a claim on a solo bounty, or on an open bounty that never had an external
-  /// contributor.
+  /// @notice Accept a claim on a solo bounty, or on an open bounty that never had an external contributor.
   /// @dev Open bounties with any external contributor must use the vote flow.
   function acceptClaim(uint256 bountyId, uint256 claimId) external nonReentrant {
     _requireActiveBounty(bountyId);
@@ -755,22 +731,19 @@ contract PoidhV3 is ReentrancyGuard {
 
     Bounty memory bounty = bounties[bountyId];
 
-    // Solo bounty: issuer can accept
     if (participants[bountyId].length == 0) {
       if (msg.sender != bounty.issuer) revert WrongCaller();
       _acceptClaim(bountyId, claimId);
       return;
     }
 
-    // Open bounty: direct accept ONLY if it never had external contributors.
     if (everHadExternalContributor[bountyId]) revert NotSoloBounty();
     if (msg.sender != bounty.issuer) revert WrongCaller();
 
     _acceptClaim(bountyId, claimId);
   }
 
-  /// @dev Finalizes the bounty and claim, credits pending withdrawals, then transfers the claim
-  /// NFT.
+  /// @dev Finalizes the bounty and claim, credits pending withdrawals, then transfers the claim NFT.
   function _acceptClaim(uint256 bountyId, uint256 claimId) internal {
     Bounty storage bounty = bounties[bountyId];
     Claim storage claim = claims[claimId];
@@ -781,37 +754,33 @@ contract PoidhV3 is ReentrancyGuard {
     if (bounty.amount > address(this).balance) revert InsufficientBalance();
 
     address claimIssuer = claim.issuer;
+    address bountyIssuer = bounty.issuer;
     uint256 bountyAmount = bounty.amount;
+    uint256 round = voteRound[bountyId];
 
     uint256 fee = (bountyAmount * FEE_BPS) / BPS_DENOM;
     uint256 payout = bountyAmount - fee;
 
-    // Effects: finalize BEFORE external calls
     bounty.claimer = claimIssuer;
     bounty.claimId = claimId;
     bounty.amount = 0;
-
     claim.accepted = true;
 
-    // snapshot vote state (if called via resolveVote)
     uint256 currentVotingClaim = bountyCurrentVotingClaim[bountyId];
     Votes memory voteSnap = bountyVotingTracker[bountyId];
 
-    // Clear voting state
     bountyCurrentVotingClaim[bountyId] = 0;
     delete bountyVotingTracker[bountyId];
 
-    // Pull payments
     pendingWithdrawals[claimIssuer] += payout;
     pendingWithdrawals[treasury] += fee;
 
-    emit ClaimAccepted(bountyId, claimId, claimIssuer, bounty.issuer, bountyAmount, payout, fee);
+    emit ClaimAccepted(bountyId, claimId, claimIssuer, bountyIssuer, bountyAmount, payout, fee, round);
 
-    // Interaction: transfer NFT out of escrow WITHOUT ERC721Receiver callbacks
-    poidhNft.transferFrom(address(this), bounty.issuer, claimId);
+    poidhNft.transferFrom(address(this), bountyIssuer, claimId);
 
     if (currentVotingClaim != 0) {
-      emit VotingResolved(bountyId, claimId, true, voteSnap.yes, voteSnap.no);
+      emit VotingResolved(bountyId, claimId, true, voteSnap.yes, voteSnap.no, round);
     }
   }
 
