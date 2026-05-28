@@ -143,7 +143,7 @@ cast balance <CONTRACT_ADDRESS> --rpc-url $RPC_URL
 |-------|-------------------|------------------|
 | Arbitrum | 0.001 ETH | 0.00001 ETH |
 | Base | 0.001 ETH | 0.00001 ETH |
-| Degenchain | 1000 DEGEN | 10 DEGEN |
+| Degen Chain | 1000 DEGEN | 10 DEGEN |
 | Ethereum Mainnet | 0.001 ETH | 0.00001 ETH |
 
 ### Voting Period
