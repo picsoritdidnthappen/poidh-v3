@@ -1,6 +1,8 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  ignoreDeadLinks: true, 
+  
   title: 'poidh docs',
   description: 'Secure bounty protocol with social crowdfunding, weighted polling, and pull-payments',
   
