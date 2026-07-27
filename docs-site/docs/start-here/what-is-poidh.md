@@ -2,7 +2,7 @@
 
 **poidh (pics or it didn't happen) is a social bounty network for coordinating action.**
 
-Anyone can create a bounty asking for something to happen, put money behind it, and let other people make it happen.
+Anyone can create a bounty asking for something to happen, put money behind it, and others can add to the pot.
 
 Someone completes the task and submits proof. The community evaluates the proof. If the claim is accepted, the person who completed the bounty gets paid.
 
@@ -50,7 +50,7 @@ This creates a simple marketplace around an outcome:
 
 **Someone wants something to happen.
 Someone else is willing to make it happen.
-The community helps determine whether it happened.**
+The community makes the final judgement call.**
 
 ## proof is part of the product
 
@@ -73,7 +73,7 @@ The goal isn't to blindly trust the person making a claim. The goal is to give t
 
 This makes the quality of a bounty important.
 
-A good bounty is **precise, observable, impactful, doable, and horizon-bound.**
+A good bounty is **precise, observable, impactful, doable, and horizoned.**
 
 **p — precise**
 The desired outcome is clearly defined.
