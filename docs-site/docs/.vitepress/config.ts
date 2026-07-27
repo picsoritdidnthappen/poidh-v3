@@ -18,7 +18,7 @@ export default defineConfig({
         text: 'start here',
         items: [
           { text: 'what is poidh?', link: '/start-here/what-is-poidh' },
-          { text: 'how poidh works', link: '/start-here/how-poidh-works' },
+          { text: 'how poidh works', link: '/start-here/how-it-works' },
         ]
       },
       {
