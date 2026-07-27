@@ -31,8 +31,8 @@ export default defineConfig({
           { text: 'boosting a bounty', link: '/using-poidh/boosting-a-bounty' },
           { text: 'claiming a bounty', link: '/using-poidh/claiming-a-bounty' },
           { text: 'confirming a claim', link: '/using-poidh/confirming-a-claim' },
-          { text: 'voting on claims', link: '/using-poidh/voting-on-claims' }
-          { text: 'getting paid', link: '/using-poidh/getting-paid' },
+          { text: 'voting on claims', link: '/using-poidh/voting-on-claims' },
+          { text: 'getting paid', link: '/using-poidh/getting-paid' }
         ]
       },
       {
@@ -40,9 +40,9 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'albums', link: '/features/albums' },
-          { text: 'profiles', link: '/features/profiles' }
+          { text: 'profiles', link: '/features/profiles' },
           { text: 'claim nfts', link: '/features/claim-nfts' },
-          { text: 'poidh score', link: '/features/poidh-score' },
+          { text: 'poidh score', link: '/features/poidh-score' }
         ]
       },
       {
