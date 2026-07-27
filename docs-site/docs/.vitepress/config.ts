@@ -19,7 +19,6 @@ export default defineConfig({
         items: [
           { text: 'what is poidh?', link: '/start-here/what-is-poidh' },
           { text: 'how poidh works', link: '/start-here/how-poidh-works' },
-          { text: 'the coordination protocol', link: '/start-here/coordination-protocol' },
         ]
       },
       {
