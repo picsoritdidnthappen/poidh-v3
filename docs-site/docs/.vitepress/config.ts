@@ -1,35 +1,40 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
-  title: 'POIDH v3',
-  description: 'Secure bounty protocol with weighted voting and pull-payments',
+  title: 'poidh docs',
+  description: 'Secure bounty protocol with social crowdfunding, weighted polling, and pull-payments',
   
-  themeConfig: {
+    themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Architecture', link: '/architecture' },
-      { text: 'State Machines', link: '/state-machines' },
-      { text: 'Security', link: '/security' },
-      { text: 'API', link: '/api' },
-      { text: 'Deployment', link: '/deployment' },
+      { text: 'Start Here', link: '/start-here/what-is-poidh' },
+      { text: 'Developers', link: '/developers/index' },
     ],
 
     sidebar: [
       {
-        text: 'Guide',
+        text: 'Start Here',
         items: [
-          { text: 'Introduction', link: '/' },
-          { text: 'Architecture', link: '/architecture' },
-          { text: 'State Machines', link: '/state-machines' },
-          { text: 'Security', link: '/security' },
-          { text: 'API Reference', link: '/api' },
-          { text: 'Deployment', link: '/deployment' },
+          { text: 'What is POIDH?', link: '/start-here/what-is-poidh' },
+          { text: 'How POIDH Works', link: '/start-here/how-poidh-works' },
+          { text: 'Coordination Protocol', link: '/start-here/coordination-protocol' },
+        ]
+      },
+      {
+        text: 'Developers',
+        items: [
+          { text: 'Overview', link: '/developers/index' },
+          { text: 'Architecture', link: '/developers/architecture' },
+          { text: 'State Machines', link: '/developers/state-machines' },
+          { text: 'Security', link: '/developers/security' },
+          { text: 'API Reference', link: '/developers/api' },
+          { text: 'Deployment', link: '/developers/deployment' },
         ]
       }
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/picsoritdidnthappen/poidh-contracts' }
+      { icon: 'github', link: 'https://github.com/picsoritdidnthappen/poidh-app' }
     ],
 
     search: {
