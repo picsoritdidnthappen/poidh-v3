@@ -10,7 +10,7 @@ export default defineConfig({
     nav: [
       { text: 'home', link: '/' },
       { text: 'start here', link: '/start-here/what-is-poidh' },
-      { text: 'developers', link: '/developers/index' },
+      { text: 'developers', link: '/developers/overview' },
     ],
 
     sidebar: [
