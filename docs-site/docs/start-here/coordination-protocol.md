@@ -1,3 +1,0 @@
-###coordination protocol
-
-text
