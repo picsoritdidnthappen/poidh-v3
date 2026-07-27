@@ -84,19 +84,19 @@ The participant has freedom to decide which café, tea shop, or bookstore to vis
 
 A useful way to evaluate your bounty before publishing is the **poidh framework**:
 
-**Precise**
+**precise**
 Is it clear exactly what needs to happen?
 
-**Observable**
+**observable**
 Will someone be able to determine whether it happened?
 
-**Impactful**
+**impactful**
 Is the outcome worth incentivizing?
 
-**Doable**
+**doable**
 Can someone realistically accomplish it?
 
-**Horizon-bound**
+**horizoned**
 Does the bounty have a clear sense of when or under what conditions the opportunity ends?
 
 [DIAGRAM: Five-part poidh framework — Precise, Observable, Impactful, Doable, Horizon-bound]
@@ -134,7 +134,7 @@ When creating a bounty, choose where you want the bounty to live:
 * **Ethereum Mainnet**
 * **Base**
 * **Arbitrum**
-* **DEGEN**
+* **Degen Chain**
 
 The chain you select determines where the bounty is created and where its funds and activity are recorded.
 
