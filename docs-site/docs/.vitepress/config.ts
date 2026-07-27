@@ -65,8 +65,7 @@ export default defineConfig({
           { text: 'deployment', link: '/contracts/deployment' }
         ]
       }
-    ]
-  }
+    ],
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/picsoritdidnthappen/poidh-app' }
