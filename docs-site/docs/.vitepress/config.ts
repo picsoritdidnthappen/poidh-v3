@@ -8,8 +8,8 @@ export default defineConfig({
 
   themeConfig: {
     nav: [
-      { text: 'home', link: '/' },
       { text: 'start here', link: '/start-here/what-is-poidh' },
+      { text: 'using poidh', link: '/using-poidh/creating-a-bounty' },
       { text: 'developers', link: '/developers/building-on-poidh' },
       { text: 'contracts', link: '/contracts/overview' }
     ],
@@ -27,12 +27,12 @@ export default defineConfig({
         text: 'using poidh',
         collapsed: false,
         items: [
+          { text: 'creating a bounty', link: '/using-poidh/creating-a-bounty' },
           { text: 'boosting a bounty', link: '/using-poidh/boosting-a-bounty' },
           { text: 'claiming a bounty', link: '/using-poidh/claiming-a-bounty' },
           { text: 'confirming a claim', link: '/using-poidh/confirming-a-claim' },
-          { text: 'creating a bounty', link: '/using-poidh/creating-a-bounty' },
-          { text: 'getting paid', link: '/using-poidh/getting-paid' },
           { text: 'voting on claims', link: '/using-poidh/voting-on-claims' }
+          { text: 'getting paid', link: '/using-poidh/getting-paid' },
         ]
       },
       {
@@ -40,9 +40,9 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'albums', link: '/features/albums' },
+          { text: 'profiles', link: '/features/profiles' }
           { text: 'claim nfts', link: '/features/claim-nfts' },
           { text: 'poidh score', link: '/features/poidh-score' },
-          { text: 'profiles', link: '/features/profiles' }
         ]
       },
       {
