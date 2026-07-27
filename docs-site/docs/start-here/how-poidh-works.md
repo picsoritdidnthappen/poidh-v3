@@ -34,9 +34,9 @@ The best bounties make the desired outcome and requirements easy to understand b
 
 A few things worth knowing before you post:
 
-- **values fluctuate.** Bounty rewards are denominated in ETH or DEGEN, so the dollar equivalent will change with the market. Dollar figures in bounty descriptions are estimates, not guarantees.
-- **deadlines are suggestions, not rules.** You can include a suggested timeline in your description to set expectations, but nothing in the protocol enforces a hard cutoff. Bounties can stay open as long as you want.
-- **your funds are yours.** They live in an immutable smart contract controlled by your wallet. poidh never touches them.
+- **Values fluctuate.** Bounty rewards are denominated in ETH or DEGEN, so the dollar equivalent will change with the market. Dollar figures in bounty descriptions are estimates, not guarantees.
+- **Deadlines are suggestions, not rules.** You can include a suggested timeline in your description to set expectations, but nothing in the protocol enforces a hard cutoff. Bounties can stay open as long as you want.
+- **Your funds are yours.** They live in an immutable smart contract controlled by your wallet. poidh never touches them.
 
 ### writing a good bounty
 
@@ -60,7 +60,9 @@ Once a bounty exists, it needs an incentive.
 
 The creator can fund it directly — but they don't have to be the only one who does.
 
-**anyone can add funds to a bounty.**
+**Anyone can add funds to a bounty.**
+
+<img width="411" height="496" alt="Screen Shot 2026-07-27 at 3 48 38 PM" src="https://github.com/user-attachments/assets/8a76d3cb-3b10-4302-b1b2-a1a82db4d2bd" />
 
 Up to 150 wallets can contribute to a single bounty. This means a group of people can collectively fund an outcome without needing to coordinate payments among themselves. The money follows the bounty, not the funder.
 
@@ -102,6 +104,12 @@ Evidence might include:
 
 The exact evidence required depends on the bounty. This is why writing clear proof requirements upfront matters.
 
+<img width="456" height="717" alt="Screen Shot 2026-07-27 at 3 53 15 PM" src="https://github.com/user-attachments/assets/710239cb-e1fc-4ed1-969e-cc9e1400de06" /> <br>
+
+<img width="452" height="724" alt="Screen Shot 2026-07-27 at 3 53 25 PM" src="https://github.com/user-attachments/assets/3cac266f-4f56-46ea-9270-fdc44575f8bd" /> <br>
+
+<img width="449" height="717" alt="Screen Shot 2026-07-27 at 3 53 32 PM" src="https://github.com/user-attachments/assets/3020ad5c-2af3-4ca1-a402-38830196bcbd" /> <br>
+
 ### good proof is contextual
 
 poidh doesn't attempt to define a universal standard for "proof."
@@ -116,7 +124,7 @@ A photo with an older woman demonstrates they were together. It doesn't necessar
 
 A stronger claim might include evidence of the cooking process, the grandmother participating, and other context that establishes the relationship.
 
-**proof is about demonstrating the outcome, not merely producing a related photograph.**
+**Proof is about demonstrating the outcome, not merely producing a related photograph.**
 
 ---
 
@@ -131,7 +139,7 @@ Every wallet that has contributed funds to a bounty earns voting rights proporti
 
 This is the mechanism that makes poidh trustless. No single party controls the outcome. The bounty creator can't unilaterally pay a fake claim. Contributors can't steal the funds. The protocol enforces the result.
 
-**the claimant provides evidence. the community evaluates it. the protocol records the result.**
+**The claimant provides evidence. The community evaluates it. The protocol records the result.**
 
 ---
 
@@ -160,7 +168,7 @@ Most bounty platforms are one-to-one: one poster, one worker, one approver.
 
 poidh is many-to-many:
 
-**one person can ask. many people can fund. anyone can do. the community verifies.**
+**One person can ask. Many people can fund. Anyone can do. The community verifies.**
 
 This creates a social dynamic that traditional bounty boards don't have. When you contribute to a poidh bounty, you're not just adding money — you're signaling that you believe this outcome is worth achieving. Other people can see that signal and add their own. The bounty price becomes a real-time measure of how much a community values a specific outcome happening in the world.
 
