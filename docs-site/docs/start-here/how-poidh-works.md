@@ -12,6 +12,8 @@ A typical bounty follows six steps:
 
 ## 1. create a bounty
 
+<img width="472" height="754" alt="Screen Shot 2026-07-27 at 3 43 28 PM" src="https://github.com/user-attachments/assets/51556d5a-d0ef-469c-8701-14ce884b5ff4" />
+
 Everything starts with an outcome someone wants to see happen.
 
 A bounty creator describes:
@@ -40,15 +42,15 @@ A few things worth knowing before you post:
 
 A useful way to evaluate a bounty before posting is the **poidh framework**:
 
-**Precise** — is it clear exactly what needs to happen?
+**precise** — is it clear exactly what needs to happen?
 
-**Observable** — will there be enough evidence to determine whether it happened?
+**observable** — will there be enough evidence to determine whether it happened?
 
-**Impactful** — is the outcome worth incentivizing?
+**impactful** — is the outcome worth incentivizing?
 
-**Doable** — can someone realistically accomplish it?
+**doable** — can someone realistically accomplish it?
 
-**Horizon-bound** — is there a suggested timeline that sets expectations for claimants?
+**horizon-bound** — is there a suggested timeline that sets expectations for claimants?
 
 ---
 
@@ -64,13 +66,11 @@ Up to 150 wallets can contribute to a single bounty. This means a group of peopl
 
 For example:
 
-> Kenny creates a bounty with 0.05 ETH to get someone to photograph a rare bird.
-> Mariana contributes 0.01 ETH. Three other people contribute another 0.04 ETH.
-> The bounty now offers 0.1 ETH — and Kenny didn't have to ask anyone for permission.
+> Alice creates a bounty with 0.05 ETH to get someone to photograph a rare bird.
+> Bob contributes 0.01 ETH. Three other people contribute another 0.04 ETH total.
+> The bounty now offers 0.1 ETH — and it all happened without anyone having to exchange payment details.
 
 This is what makes poidh bounties social objects rather than static listings. A 0.01 ETH bounty can become a 10 ETH bounty overnight if the right people see it and believe in it. There's no cap on how much can be added. The virality comes from skin in the game, not a like or a repost.
-
-We've seen it happen.
 
 ---
 
