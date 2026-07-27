@@ -156,11 +156,11 @@ This means you can put up an initial reward and invite others to contribute to t
 
 For example:
 
-> You create a $100 bounty.
+> You create a .1 ETH bounty.
 >
-> Three other people also want to see the outcome happen and contribute another $50 each.
+> Four other people also want to see the outcome happen and contribute another .1 ETH each.
 >
-> The bounty now has a $250 reward.
+> The bounty now has a .5 ETH reward.
 
 [DIAGRAM: Multiple contributors → one open bounty → larger reward]
 
@@ -178,7 +178,7 @@ Other people cannot add funds to it.
 
 This is useful when you want complete control over the reward amount rather than inviting additional funding.
 
-For example, you might want to create a bounty with a fixed $100 reward and ensure that the reward stays exactly $100.
+For example, you might want to create a bounty with a fixed .1 ETH reward and ensure that the reward stays exactly .1 ETH.
 
 ### which should you choose?
 
