@@ -5,34 +5,68 @@ export default defineConfig({
   
   title: 'poidh docs',
   description: 'Secure bounty protocol with social crowdfunding, weighted polling, and pull-payments',
-  
-    themeConfig: {
+
+  themeConfig: {
     nav: [
       { text: 'home', link: '/' },
       { text: 'start here', link: '/start-here/what-is-poidh' },
-      { text: 'developers', link: '/developers/overview' },
+      { text: 'developers', link: '/developers/building-on-poidh' },
+      { text: 'contracts', link: '/contracts/overview' }
     ],
 
     sidebar: [
       {
         text: 'start here',
+        collapsed: false,
         items: [
           { text: 'what is poidh?', link: '/start-here/what-is-poidh' },
-          { text: 'how poidh works', link: '/start-here/how-it-works' },
+          { text: 'how poidh works', link: '/start-here/how-it-works' }
+        ]
+      },
+      {
+        text: 'using poidh',
+        collapsed: false,
+        items: [
+          { text: 'boosting a bounty', link: '/using-poidh/boosting-a-bounty' },
+          { text: 'claiming a bounty', link: '/using-poidh/claiming-a-bounty' },
+          { text: 'confirming a claim', link: '/using-poidh/confirming-a-claim' },
+          { text: 'creating a bounty', link: '/using-poidh/creating-a-bounty' },
+          { text: 'getting paid', link: '/using-poidh/getting-paid' },
+          { text: 'voting on claims', link: '/using-poidh/voting-on-claims' }
+        ]
+      },
+      {
+        text: 'features',
+        collapsed: false,
+        items: [
+          { text: 'albums', link: '/features/albums' },
+          { text: 'claim nfts', link: '/features/claim-nfts' },
+          { text: 'poidh score', link: '/features/poidh-score' },
+          { text: 'profiles', link: '/features/profiles' }
         ]
       },
       {
         text: 'developers',
+        collapsed: false,
         items: [
-          { text: 'overview', link: '/developers/overview' },
-          { text: 'achitecture', link: '/developers/architecture' },
-          { text: 'state machines', link: '/developers/state-machines' },
-          { text: 'security', link: '/developers/security' },
-          { text: 'API reference', link: '/developers/api' },
-          { text: 'deployment', link: '/developers/deployment' },
+          { text: 'building on poidh', link: '/developers/building-on-poidh' },
+          { text: 'alternate frontends', link: '/developers/alternate-frontends' }
+        ]
+      },
+      {
+        text: 'contracts',
+        collapsed: false,
+        items: [
+          { text: 'overview', link: '/contracts/overview' },
+          { text: 'architecture', link: '/contracts/architecture' },
+          { text: 'state machines', link: '/contracts/state-machines' },
+          { text: 'security', link: '/contracts/security' },
+          { text: 'api reference', link: '/contracts/api' },
+          { text: 'deployment', link: '/contracts/deployment' }
         ]
       }
-    ],
+    ]
+  }
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/picsoritdidnthappen/poidh-app' }
