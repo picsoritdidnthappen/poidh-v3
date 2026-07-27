@@ -23,7 +23,7 @@ export default defineConfig({
       {
         text: 'Developers',
         items: [
-          { text: 'Overview', link: '/developers/index' },
+          { text: 'Overview', link: '/developers/overview' },
           { text: 'Architecture', link: '/developers/architecture' },
           { text: 'State Machines', link: '/developers/state-machines' },
           { text: 'Security', link: '/developers/security' },
