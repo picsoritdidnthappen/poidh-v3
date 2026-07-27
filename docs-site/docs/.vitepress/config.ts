@@ -8,29 +8,29 @@ export default defineConfig({
   
     themeConfig: {
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Start Here', link: '/start-here/what-is-poidh' },
-      { text: 'Developers', link: '/developers/index' },
+      { text: 'home', link: '/' },
+      { text: 'start here', link: '/start-here/what-is-poidh' },
+      { text: 'developers', link: '/developers/index' },
     ],
 
     sidebar: [
       {
-        text: 'Start Here',
+        text: 'start here',
         items: [
-          { text: 'What is POIDH?', link: '/start-here/what-is-poidh' },
-          { text: 'How POIDH Works', link: '/start-here/how-poidh-works' },
-          { text: 'Coordination Protocol', link: '/start-here/coordination-protocol' },
+          { text: 'what is poidh?', link: '/start-here/what-is-poidh' },
+          { text: 'how poidh works', link: '/start-here/how-poidh-works' },
+          { text: 'the coordination protocol', link: '/start-here/coordination-protocol' },
         ]
       },
       {
-        text: 'Developers',
+        text: 'developers',
         items: [
-          { text: 'Overview', link: '/developers/overview' },
-          { text: 'Architecture', link: '/developers/architecture' },
-          { text: 'State Machines', link: '/developers/state-machines' },
-          { text: 'Security', link: '/developers/security' },
-          { text: 'API Reference', link: '/developers/api' },
-          { text: 'Deployment', link: '/developers/deployment' },
+          { text: 'overview', link: '/developers/overview' },
+          { text: 'achitecture', link: '/developers/architecture' },
+          { text: 'state machines', link: '/developers/state-machines' },
+          { text: 'security', link: '/developers/security' },
+          { text: 'API reference', link: '/developers/api' },
+          { text: 'deployment', link: '/developers/deployment' },
         ]
       }
     ],
