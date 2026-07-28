@@ -1,4 +1,4 @@
-# how poidh works
+# how poidh works 🛠️
 
 poidh turns a desired outcome into an open coordination process.
 
