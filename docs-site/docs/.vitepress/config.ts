@@ -50,7 +50,7 @@ export default defineConfig({
         collapsed: false,
         items: [
           { text: 'building on poidh', link: '/developers/building-on-poidh' },
-          { text: 'alternate frontends', link: '/developers/alternate-frontends' }
+          { text: 'alternate frontends', link: '/developers/alternate-frontends' },
           { 
             text: 'agent skill', 
             link: 'https://github.com/picsoritdidnthappen/poidh-app/blob/prod/SKILL.md',
