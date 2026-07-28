@@ -97,7 +97,8 @@ The third-space bounty demonstrates the first four particularly well, while its 
 Note, the bounty description field on is Markdown-friendly and you can utilize the "preview" toggle to see what your bounty will look like when published.
 
 <img width="600" alt="Screen Shot 2026-07-27 at 4 56 51 PM" src="https://github.com/user-attachments/assets/45b211fb-e533-4dd7-b4a8-f31dccb29bf5" />
-
+<br>
+<br>
 <img width="600" alt="Screen Shot 2026-07-27 at 4 59 33 PM" src="https://github.com/user-attachments/assets/b9a72a43-416f-43ed-9d1e-8104dcd021d0" />
 
 ---
@@ -175,6 +176,8 @@ A **solo bounty** is funded exclusively by its creator.
 Other people cannot add funds to it.
 
 <img width="392" alt="Screen Shot 2026-07-27 at 5 14 41 PM" src="https://github.com/user-attachments/assets/03893a11-04d0-44e1-9770-a1b4139b4069" />
+<br>
+<br>
 <img width="392" alt="Screen Shot 2026-07-27 at 5 16 50 PM" src="https://github.com/user-attachments/assets/25110bec-2384-4401-b236-d8be624b490c" />
 <br>
 <br>
