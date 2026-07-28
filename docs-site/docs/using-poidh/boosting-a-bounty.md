@@ -93,9 +93,10 @@ If a creator wants to remain the sole funder and maintain guaranteed control ove
 
 Find an open bounty that you want to support, connect your wallet, and click the "add funds" button.
 
-You'll choose how much you want to contribute and confirm the transaction with your wallet.
-
 <img width="538" height="546" alt="boosting-funds" src="https://github.com/user-attachments/assets/2ec4e687-1e51-4fb3-bc9e-9676b6e33afc" />
+<br>
+<br>
+You'll choose how much you want to contribute, click "boost bounty", and confirm the transaction with your wallet.
 
 Once the transaction is confirmed, your contribution is added to the bounty's total reward.
 
