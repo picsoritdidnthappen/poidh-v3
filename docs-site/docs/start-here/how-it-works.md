@@ -21,14 +21,6 @@ A bounty creator describes:
 - **what should happen**
 - **what counts as completion**
 - **what proof is required**
-- **how much the person who completes it should earn**
-
-For example:
-
-> **bounty:** cook your grandmother's signature dish
-> **reward:** 0.05 ETH (~$100 at time of posting)
-> **requirement:** prepare the dish with your grandmother present
-> **proof:** submit evidence demonstrating that you cooked the dish together
 
 The best bounties make the desired outcome and requirements easy to understand before anyone attempts them. The more ambiguity a bounty contains, the harder it becomes for participants and voters to agree on what constitutes success.
 
