@@ -54,8 +54,8 @@ export default defineConfig({
           { 
             text: 'agent skill', 
             link: 'https://github.com/picsoritdidnthappen/poidh-app/blob/prod/SKILL.md',
-            target: '_blank', // Forces it to open cleanly as an external link
-            rel: 'noreferrer' // Optional: Good security practice for external URLs
+            target: '_blank', 
+            rel: 'noreferrer' 
           }
         ]
       },
@@ -70,11 +70,19 @@ export default defineConfig({
           { text: 'api reference', link: '/contracts/api' },
           { text: 'deployment', link: '/contracts/deployment' }
         ]
+      },
+      {
+        text: 'contact us',
+        collapsed: false,
+        items: [
+          { text: 'links', link: '/contact/links' },
+        ]
       }
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/picsoritdidnthappen/poidh-app' }
+      { icon: 'github', link: 'https://github.com/picsoritdidnthappen/poidh-app' },
+      { icon: 'x', link: 'https://x.com/poidhxyz' }
     ],
 
     search: {
