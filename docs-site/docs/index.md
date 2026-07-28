@@ -1,6 +1,6 @@
 # welcome to poidh 📸
 
-**poidh is a social bounty network for coordinating action.**
+**poidh is a social bounty protocol for coordinating action.**
 
 These docs explain how poidh works, the ideas behind the protocol, and how to build on it.
 
