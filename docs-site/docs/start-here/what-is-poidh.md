@@ -129,16 +129,6 @@ The rules are encoded in the protocol, while the community provides the social l
 
 ## the bigger idea
 
-poidh started with a simple question:
+**The most useful way to express an idea on the internet is a post. The most useful way to create action through the internet is a bounty.**
 
-> **What if you could put a bounty on anything?**
-
-That question leads somewhere much bigger than a task marketplace.
-
-Bounties are a general-purpose way to express:
-
-**“I want this outcome to exist, and I'm willing to incentivize someone to make it happen.”**
-
-poidh is building the infrastructure to make that possible on the internet.
-
-**Bounties are the atomic unit of coordination.**
+Learn more via: https://words.poidh.xyz/the-coordination-protocol
