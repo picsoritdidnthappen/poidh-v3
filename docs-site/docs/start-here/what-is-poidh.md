@@ -8,7 +8,7 @@ Someone completes the task and submits proof. The community evaluates the proof.
 
 **create → fund → do → prove → verify → pay**
 
-<img width="1208" height="919" alt="Screen Shot 2026-07-27 at 11 19 01 AM" src="https://github.com/user-attachments/assets/82d1ca8c-9d78-4da8-b2d2-66d860557d1e" />
+<img width="2416" height="1838" alt="poidh home" src="https://github.com/user-attachments/assets/539e1cc6-71a3-4c6e-b89e-543474373508" />
 
 ## bounties turn ideas into action
 
