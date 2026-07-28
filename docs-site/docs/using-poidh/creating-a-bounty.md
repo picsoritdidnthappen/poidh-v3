@@ -1,14 +1,16 @@
 # creating a bounty
 
-A bounty is a request for an outcome that someone can complete in exchange for a reward.
+A bounty is a request for an outcome that someone can complete in exchange for a reward. To get started, click the big red button.
+
+<img width="395" height="174" alt="Screen Shot 2026-07-27 at 4 54 20 PM" src="https://github.com/user-attachments/assets/3ea17dd1-44df-4435-a503-42fd30bcb0e8" />
 
 Creating a bounty on poidh comes down to five things:
 
 **Title → Description → Amount → Chain → Bounty Type**
 
-[SCREENSHOT: Full bounty creation form showing all five fields]
+Your job is to design a bounty that makes the desired outcome clear, gives someone a reason to pursue it, and makes the result possible to verify.
 
-The most important part isn't filling out the form. It's designing a bounty that makes the desired outcome clear, gives someone a reason to pursue it, and makes the result possible to verify.
+<img width="472" height="754" alt="Screen Shot 2026-07-27 at 3 43 28 PM" src="https://github.com/user-attachments/assets/264aaf19-0b30-4372-8f1f-97b568c2c434" />
 
 ---
 
@@ -27,8 +29,6 @@ is more useful than:
 > **Go Do This Thing**
 
 The title doesn't need to contain every requirement. That's what the description is for.
-
-[SCREENSHOT: Title field]
 
 ---
 
@@ -72,8 +72,6 @@ Here's an example of a well-designed bounty:
 >
 > **First legit claim wins. 🏆**
 
-[SCREENSHOT: This bounty as it appears on poidh]
-
 This is a strong bounty because it combines a **clear objective** with **specific, observable requirements**.
 
 The participant has freedom to decide which café, tea shop, or bookstore to visit and how to approach the review. But there is no ambiguity about what a successful claim needs to contain.
@@ -84,24 +82,23 @@ The participant has freedom to decide which café, tea shop, or bookstore to vis
 
 A useful way to evaluate your bounty before publishing is the **poidh framework**:
 
-**precise**
-Is it clear exactly what needs to happen?
+**precise**: Is it clear exactly what needs to happen?
 
-**observable**
-Will someone be able to determine whether it happened?
+**observable**: Will someone be able to determine whether it happened?
 
-**impactful**
-Is the outcome worth incentivizing?
+**impactful**: Is the outcome worth incentivizing?
 
-**doable**
-Can someone realistically accomplish it?
+**doable**: Can someone realistically accomplish it?
 
-**horizoned**
-Does the bounty have a clear sense of when or under what conditions the opportunity ends?
-
-[DIAGRAM: Five-part poidh framework — Precise, Observable, Impactful, Doable, Horizon-bound]
+**horizoned**: Does the bounty have a clear sense of when or under what conditions the opportunity ends?
 
 The third-space bounty demonstrates the first four particularly well, while its **“First legit claim wins”** condition creates a clear competitive endpoint.
+
+Note, the bounty description field on is Markdown-friendly and you can utilize the "preview" toggle to see what your bounty will look like when published.
+
+<img width="602" height="365" alt="Screen Shot 2026-07-27 at 4 56 51 PM" src="https://github.com/user-attachments/assets/45b211fb-e533-4dd7-b4a8-f31dccb29bf5" />
+
+<img width="596" height="340" alt="Screen Shot 2026-07-27 at 4 59 33 PM" src="https://github.com/user-attachments/assets/b9a72a43-416f-43ed-9d1e-8104dcd021d0" />
 
 ---
 
@@ -111,7 +108,7 @@ The amount is the reward attached to the bounty.
 
 You can choose the amount and the currency in which the bounty is funded.
 
-[SCREENSHOT: Amount field showing ETH / DEGEN selection]
+<img width="393" height="119" alt="Screen Shot 2026-07-27 at 5 02 47 PM" src="https://github.com/user-attachments/assets/c8ae1bf6-6621-430a-848f-2376ac1a8dd2" />
 
 The amount should reflect the difficulty, time, cost, and desirability of the outcome.
 
@@ -127,7 +124,7 @@ The reward is what turns a request into an incentive:
 
 poidh supports multiple chains.
 
-[SCREENSHOT: Chain selector]
+<img width="380" height="231" alt="Screen Shot 2026-07-27 at 5 03 36 PM" src="https://github.com/user-attachments/assets/13db5ac3-f38f-422c-bb54-da1d8d664888" />
 
 When creating a bounty, choose where you want the bounty to live:
 
@@ -162,11 +159,14 @@ For example:
 >
 > The bounty now has a .5 ETH reward.
 
-[DIAGRAM: Multiple contributors → one open bounty → larger reward]
-
 Open bounties turn individual requests into **crowdfunded incentives**.
 
 Anyone can decide that an outcome is worth supporting and add funds to the bounty.
+
+<img width="751" height="591" alt="Screen Shot 2026-07-27 at 5 04 45 PM" src="https://github.com/user-attachments/assets/58a6ee00-2e46-4728-8c32-67eeb298a42e" />
+
+_[An open bounty that climbed 5.5x in value after creation](https://poidh.xyz/base/bounty/1267)_
+
 
 ### solo bounty
 
@@ -174,8 +174,10 @@ A **solo bounty** is funded exclusively by its creator.
 
 Other people cannot add funds to it.
 
-[SCREENSHOT: Bounty type toggle showing Open Bounty / Solo Bounty]
-
+<img width="392" height="81" alt="Screen Shot 2026-07-27 at 5 14 41 PM" src="https://github.com/user-attachments/assets/03893a11-04d0-44e1-9770-a1b4139b4069" />
+<img width="395" height="80" alt="Screen Shot 2026-07-27 at 5 16 50 PM" src="https://github.com/user-attachments/assets/25110bec-2384-4401-b236-d8be624b490c" />
+<br>
+<br>
 This is useful when you want complete control over the reward amount rather than inviting additional funding.
 
 For example, you might want to create a bounty with a fixed .1 ETH reward and ensure that the reward stays exactly .1 ETH.
@@ -230,8 +232,6 @@ Can a participant realistically produce the evidence you're asking for?
 
 Do you want other people to be able to contribute to the reward, or do you want to remain the sole funder?
 
-[SCREENSHOT: Final bounty preview before publishing]
-
 ---
 
 ## publish the bounty
@@ -240,11 +240,9 @@ Once everything looks right, publish the bounty.
 
 You'll be asked to confirm the transaction with your wallet.
 
-[SCREENSHOT: Wallet transaction confirmation]
+After the transaction is confirmed, your bounty is live. You will be redirected to a new URL that hosts your bounty. Note: If, for some reason, you are not redirected, you can check your profile page for the new bounty.
 
-After the transaction is confirmed, your bounty is live.
-
-It can now be:
+Your bounty can now be:
 
 * Discovered by other users
 * Shared with your community
@@ -252,8 +250,6 @@ It can now be:
 * Completed by anyone who wants to attempt it
 * Claimed with proof
 * Evaluated by the community
-
-[SCREENSHOT: Newly published bounty page]
 
 Your bounty has gone from an idea to an open invitation for someone to make that idea happen.
 
