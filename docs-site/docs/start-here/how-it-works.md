@@ -50,7 +50,7 @@ A useful way to evaluate a bounty before posting is the **poidh framework**:
 
 Once a bounty exists, it needs an incentive.
 
-The creator can fund it directly — but they don't have to be the only one who does.
+The creator funds it directly upon creation, but they don't have to be the only one who does.
 
 **Anyone can add funds to a bounty.**
 
