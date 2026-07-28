@@ -191,3 +191,10 @@ A poidh bounty can be understood as five layers:
 The payout is the final consequence of that verification.
 
 This is the fundamental mechanism behind poidh.
+
+## further reading
+
+- [The Ephemeral DAO Machine](https://words.poidh.xyz/the-ephemeral-dao-machine)
+- [poidh open bounties guide](https://words.poidh.xyz/poidh-open-bounties-guide)
+
+
