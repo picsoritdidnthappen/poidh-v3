@@ -121,3 +121,9 @@ You can view the full REST API documentation, test endpoints, and inspect reques
 * **Source Material:** The database is populated by an offchain indexer listening to onchain events emitted by the immutable poidh contracts.
 * **Accuracy:** This data is roughly **99.9% historically accurate**. 
 * **Developer Note:** Because this data is derived from an offchain indexer parsing the blockchain, it is not as "perfect" or instantaneous as pulling directly from an onchain RPC query. For highly critical, real-time value transfers or consensus checks, consider validating states directly against the contract.
+
+---
+
+## using ai agents
+
+Our poidh skill can walk your agent through interacting with the protocol https://github.com/picsoritdidnthappen/poidh-app/blob/prod/SKILL.md. 
