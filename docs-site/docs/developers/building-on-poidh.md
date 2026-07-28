@@ -64,6 +64,52 @@ THESE CONTRACTS ARE LISTED FOR INFORMATIONAL PURPOSES ONLY AND SHOULD NOT BE USE
 
 ---
 
+## direct json data endpoints
+
+If you want a lightweight way to quickly fetch data without connecting to the database indexer or parsing chain events, poidh exposes simple JSON endpoints directly from the frontend platform. 
+
+### single bounty data
+You can append `/data` to the end of any individual bounty URL to instantly receive its underlying info in JSON format.
+
+* **Format:** `https://poidh.xyz/[chain]/bounty/[bounty-id]/data`
+* **Sample Live URL:** http://poidh.xyz/base/bounty/1271/data
+
+**Schema Example:**
+```json
+{
+  "id": 1271,
+  "onChainId": 285,
+  "chainId": 8453,
+  "title": "Best Bounty (July 2026) 🏆",
+  "description": "Each month, we celebrate the bounty creators...",
+  "amount": "67000000000000000",
+  "issuer": "0x4200ac338555e25b20c8fe82ac02a5c8d4e5a5b4",
+  "createdAt": "1782908709",
+  "inProgress": true,
+  "isJoinedBounty": false,
+  "isCanceled": false,
+  "isMultiplayer": true,
+  "isVoting": false,
+  "deadline": null,
+  "ban": [],
+  "extra": {"bountyId": 1271, "chainId": 8453, "album": "poidh"},
+  "hasClaims": true,
+  "hasParticipants": false,
+  "priceUsd": 125.56135,
+  "currency": "eth",
+  "url": "https://poidh.xyz/base/bounty/1271"
+}
+```
+
+### recent open bounties feed
+To grab a batch of the most recent open bounties across the platform, you can hit the global bounties data endpoint. 
+
+* **Base URL:** https://poidh.xyz/bounties/data
+* **Pagination/Limits:** The endpoint returns an initial default limit of **20** entries. You can easily scale this up by passing a custom query parameter (e.g., `?limit=100`).
+* **Sample Parameter URL:** https://poidh.xyz/bounties/data?limit=100
+
+---
+
 ## querying the poidh database (indexer)
 
 To make building user experiences easier and faster, we host a dedicated indexing service. This allows developers to pull relational data about bounties and claims via simple HTTP requests instead of spinning up heavy RPC node operations.
