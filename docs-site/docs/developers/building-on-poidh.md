@@ -50,7 +50,7 @@ Developers can interact directly with the underlying bounty mechanics or query t
 
 Note, poidh v3 is a security-focused rebuild of the protocol following [an exploit in December 2025 of the poidh v2 contracts](https://words.poidh.xyz/poidh-is-back). The main poidh website displays the history of bounties, claims, and payments completed via poidh v2, but the contracts are no longer utilized within the app. 
 
-🚨🚨 THESE CONTRACTS ARE LISTED FOR INFORMATIONAL PURPOSES ONLY AND SHOULD NOT BE USED UNDER ANY CIRCUMSTANCES 🚨🚨
+🚨🚨 THE POIDH V2 CONTRACTS ARE LISTED FOR INFORMATIONAL PURPOSES ONLY AND SHOULD NOT BE USED UNDER ANY CIRCUMSTANCES 🚨🚨
 
 **poidh v2 Core Contracts:**
 - Arbitrum - https://arbiscan.io/address/0x0aa50ce0d724cc28f8f7af4630c32377b4d5c27d
