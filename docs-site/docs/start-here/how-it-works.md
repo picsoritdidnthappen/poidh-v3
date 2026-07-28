@@ -42,7 +42,7 @@ A useful way to evaluate a bounty before posting is the **poidh framework**:
 
 **doable** — can someone realistically accomplish it?
 
-**horizon-bound** — is there a suggested timeline that sets expectations for claimants?
+**horizoned** — is there a suggested timeline that sets expectations for claimants?
 
 ---
 
