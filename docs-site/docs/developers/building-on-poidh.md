@@ -33,8 +33,34 @@ The poidh protocol is actively deployed across multiple EVM chains:
 ### contract repositories & addresses
 Developers can interact directly with the underlying bounty mechanics or query the proof-of-completion NFTs minted upon successful bounty execution. 
 
-* **poidh v3 Core Contracts:** `[Insert link to v3 contracts repo or address deployment list here]` — Review the core implementation logic for creating bounties, depositing funds, submitting claims, and handling resolution payouts.
-* **poidh NFT Contracts:** `[Insert link to NFT contracts repo or address deployment list here]` — View the ERC-721 implementation handling the metadata and proof-of-completion mints.
+**poidh v3 Core Contracts:**
+- Ethereum Mainnet - https://etherscan.io/address/0xe731dfadbff20542e10d09d26fc71445c70d4232
+- Arbitrum - https://arbiscan.io/address/0x5555fa783936c260f77385b4e153b9725fef1719
+- Base - https://basescan.org/address/0x5555fa783936c260f77385b4e153b9725fef1719
+- Degen Chain - https://explorer.degen.tips/address/0x18E5585ca7cE31b90Bc8BB7aAf84152857cE243f
+
+**poidh v3 NFT Contracts:**
+
+- Ethereum Mainnet - https://etherscan.io/address/0x9c5f45d5e1382e4058d334d93c6c01442012a4d9
+- Arbitrum - https://arbiscan.io/address/0x27e117cc9a8da363442e7bd0618939e3eeeacf6a
+- Base - https://basescan.org/address/0x27e117cc9a8da363442e7bd0618939e3eeeacf6a
+- Degen Chain - https://explorer.degen.tips/token/0x39F04b7897DCAf9Dc454E433F43Fb1C3bB528E11
+
+**[Read the full contract docs](/contracts/overview)**
+
+Note, poidh v3 is a security-focused rebuild of the protocol following [an exploit in December 2025 of the poidh v2 contracts](https://words.poidh.xyz/poidh-is-back). The main poidh website displays the history of bounties, claims, and payments completed via poidh v2, but the contracts are no longer utilized within the app. 
+
+THESE CONTRACTS ARE LISTED FOR INFORMATIONAL PURPOSES ONLY AND SHOULD NOT BE USED UNDER ANY CIRCUMSTANCES
+
+**poidh v2 Core Contracts:**
+- Arbitrum - https://arbiscan.io/address/0x0aa50ce0d724cc28f8f7af4630c32377b4d5c27d
+- Base - https://basescan.org/address/0xb502c5856f7244dccdd0264a541cc25675353d39
+- Degen Chain - https://explorer.degen.tips/address/0x2445BfFc6aB9EEc6C562f8D7EE325CddF1780814
+
+**poidh v2 NFT Contracts:**
+- Arbitrum - https://arbiscan.io/address/0xddfb1a53e7b73dba09f79fca24765c593d447a80
+- Base - https://basescan.org/address/0xddfb1a53e7b73dba09f79fca24765c593d447a80
+- Degen Chain - https://explorer.degen.tips/token/0xDdfb1A53E7b73Dba09f79FCA24765C593D447a80
 
 ---
 
