@@ -11,7 +11,7 @@ You don't need to be the person who created the bounty, and you don't need permi
 
 **One person creates the incentive. Other people can make it bigger—and have a say in whether claims are legitimate.**
 
-[SCREENSHOT: An open bounty showing its current reward and boost/fund button]
+<img width="494" height="136" alt="add funds button" src="https://github.com/user-attachments/assets/f23b9027-25cc-4b4a-a3ac-f77386ecf486" />
 
 ## why boost a bounty?
 
@@ -35,9 +35,7 @@ When you boost, your contribution increases the incentive for someone to complet
 
 Funding and verification are connected on poidh.
 
-When you contribute to an open bounty, your contribution gives you **voting power** over claims submitted to that bounty.
-
-[DIAGRAM: Contribution → Larger reward + Voting power]
+When you contribute to an open bounty, your contribution gives you **voting power** over confirming the eventual recipient of that bounty.
 
 This means that people who put money behind an outcome aren't merely passive funders. They also have a role in determining whether the people attempting to fulfill that outcome actually succeeded.
 
@@ -46,18 +44,16 @@ Your voting power is proportional to your contribution to the bounty.
 For example, imagine an open bounty has received:
 
 * Alice: 0.05 ETH
-* Bob: 0.03 ETH
-* Charlie: 0.02 ETH
+* Bob: 0.05 ETH
+* Charlie: 0.05 ETH
 
-The bounty has 0.10 ETH in total funding.
+The bounty has 0.15 ETH in total funding.
 
-Alice contributed 50% of the funds, so she has 50% of the voting power.
+Alice contributed 33% of the funds, so she has 33% of the voting power.
 
-Bob contributed 30%, so he has 30% of the voting power.
+Bob contributed 33%, so he has 33% of the voting power.
 
-Charlie contributed 20%, so he has 20% of the voting power.
-
-[DIAGRAM: 50% contribution → 50% voting power / 30% → 30% / 20% → 20%]
+Charlie contributed 33%, so he has 33% of the voting power.
 
 This creates an important relationship:
 
@@ -67,45 +63,11 @@ See [Voting on Claims](/using-poidh/voting-on-claims) to learn more about how cl
 
 ---
 
-## example: boosting a bounty
-
-Imagine someone creates a bounty:
-
-> **Find a Great Third Space**
->
-> Find an active café, tea shop, or bookstore-style third space, document it with new photos, leave a thoughtful Google review, and provide proof that the review and visit happened.
->
-> **Reward: 0.05 ETH**
-
-You think this is a great idea, so you boost it with another **0.02 ETH**.
-
-The bounty now has:
-
-**0.07 ETH total funding**
-
-Your contribution also gives you a share of the bounty's voting power.
-
-Someone else can see the same bounty and decide to add another 0.03 ETH.
-
-Now the bounty has:
-
-**0.10 ETH total funding**
-
-The new funder receives voting power proportional to their contribution as well.
-
-[DIAGRAM: Creator funds → Person A boosts → Person B boosts → larger reward + distributed voting power]
-
-The original creator doesn't have to anticipate how much funding the bounty will ultimately receive. The community can collectively increase both the incentive and the pool of people with a stake in verification.
-
----
-
 ## open bounties can be boosted
 
 Only **open bounties** can receive additional funding.
 
 An open bounty is designed to let anyone contribute to its reward after it has been created.
-
-[SCREENSHOT: Open bounty with boost option visible]
 
 Every additional contribution increases the total reward and gives the contributor a corresponding share of voting power.
 
@@ -121,62 +83,25 @@ A **solo bounty** is funded exclusively by its creator.
 
 Other people cannot contribute additional funds to it.
 
-[SCREENSHOT: Solo bounty showing no boost option]
-
 Because there are no additional funders, there is no additional voting power to distribute through boosting.
 
-If a creator wants to remain the sole funder, they can choose a solo bounty when creating it.
-
-This gives creators a choice between two different funding models:
-
-**Open bounty**
-The reward can grow through contributions from other people, and those contributors gain voting power.
-
-**Solo bounty**
-The creator is the only source of funding and remains the sole funder.
+If a creator wants to remain the sole funder and maintain guaranteed control over payout of the bounty, they can choose a solo bounty when creating it.
 
 ---
 
 ## how to boost a bounty
 
-Find an open bounty that you want to support.
-
-[SCREENSHOT: Bounty page with boost button highlighted]
-
-Select the option to boost the bounty.
+Find an open bounty that you want to support, connect your wallet, and click the "add funds" button.
 
 You'll choose how much you want to contribute and confirm the transaction with your wallet.
 
-[SCREENSHOT: Boost amount / transaction flow]
+<img width="538" height="546" alt="boosting-funds" src="https://github.com/user-attachments/assets/2ec4e687-1e51-4fb3-bc9e-9676b6e33afc" />
 
 Once the transaction is confirmed, your contribution is added to the bounty's total reward.
-
-Your contribution also gives you voting power in the bounty's claim verification.
-
-[SCREENSHOT: Bounty page after boost showing increased reward and voting power]
 
 That's it.
 
 You don't become the bounty creator. You don't change the bounty's requirements. You simply add more incentive for someone to complete the existing outcome and gain a corresponding stake in evaluating the claims.
-
----
-
-## boosting doesn't change the bounty
-
-A boost increases the reward and gives the contributor voting power, but it does **not** change the terms of the bounty.
-
-If the bounty requires:
-
-* A particular outcome
-* Specific evidence
-* A particular type of claim
-* A particular external action
-
-those requirements remain the same after you boost it.
-
-You're contributing to the existing incentive rather than creating a new bounty.
-
-> **Boosting changes how much the bounty pays and who has a stake in verification. It doesn't change what someone has to do to earn it.**
 
 ---
 
@@ -235,29 +160,13 @@ You're not just funding a person.
 
 ---
 
-## boosting is a form of coordination
+## withdrawing a boost
 
-A bounty doesn't need to represent the desire of just one person.
+If you lose faith in a bounty being completed, you can withdraw your funds at any time _before a claim is submitted for vote_.
 
-Someone can propose an outcome.
+To do this, simply connect your wallet that originally boosted the bounty, click the "withdraw" button on the bounty page, and confirm your transaction.
 
-Someone else can agree that the outcome is worth pursuing.
-
-Another person can add more money.
-
-Another person can ultimately complete it.
-
-The people who fund the bounty can then participate in deciding whether the submitted claims satisfy its requirements.
-
-The result is a coordination process that doesn't require everyone involved to know each other or organize separately.
-
-**One person asks.
-Others support.
-Someone acts.
-The funders help verify.
-The winner gets paid.**
-
-Boosting is the mechanism that lets the financial support become collective.
+Your funds will then be available to claim via your wallet's profile page.
 
 ---
 
@@ -278,14 +187,6 @@ Before confirming your contribution, make sure you understand:
 **Do you want a stake in evaluating the resulting claims?**
 
 Once you've confirmed those details, you're ready to boost.
-
-[SCREENSHOT: Boost confirmation screen]
-
-Your contribution becomes part of the bounty's reward and gives you a corresponding share of voting power.
-
-You're no longer just watching someone else's bounty.
-
-**You're helping fund the outcome and helping determine whether it was achieved.**
 
 ---
 
