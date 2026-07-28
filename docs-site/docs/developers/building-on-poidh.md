@@ -69,7 +69,7 @@ THESE CONTRACTS ARE LISTED FOR INFORMATIONAL PURPOSES ONLY AND SHOULD NOT BE USE
 To make building user experiences easier and faster, we host a dedicated indexing service. This allows developers to pull relational data about bounties and claims via simple HTTP requests instead of spinning up heavy RPC node operations.
 
 ### api reference
-You can view the full REST API documentation, test endpoints, and inspect request/response schemas directly using the [poidh Swagger Interface](https://poidh.xyz).
+You can view the full REST API documentation, test endpoints, and inspect request/response schemas directly using https://indexer.poidh.xyz/swagger. 
 
 ### data accuracy & trust assumptions
 * **Source Material:** The database is populated by an offchain indexer listening to onchain events emitted by the immutable poidh contracts.
