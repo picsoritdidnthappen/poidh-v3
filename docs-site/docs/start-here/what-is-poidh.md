@@ -1,4 +1,4 @@
-# what is poidh
+# what is poidh 📖
 
 **poidh (pics or it didn't happen) is a social bounty network for coordinating action.**
 
