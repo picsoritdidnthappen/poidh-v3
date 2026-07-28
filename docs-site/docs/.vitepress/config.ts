@@ -51,7 +51,12 @@ export default defineConfig({
         items: [
           { text: 'building on poidh', link: '/developers/building-on-poidh' },
           { text: 'alternate frontends', link: '/developers/alternate-frontends' }
-          { text: 'agent skill', link: 'https://github.com/picsoritdidnthappen/poidh-app/blob/prod/SKILL.md' }
+          { 
+            text: 'agent skill', 
+            link: 'https://github.com/picsoritdidnthappen/poidh-app/blob/prod/SKILL.md',
+            target: '_blank', // Forces it to open cleanly as an external link
+            rel: 'noreferrer' // Optional: Good security practice for external URLs
+          }
         ]
       },
       {
