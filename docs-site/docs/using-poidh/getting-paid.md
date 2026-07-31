@@ -130,6 +130,7 @@ Good coordination has a way of compounding.
 <img width="837" height="387" alt="tree bounty" src="https://github.com/user-attachments/assets/29ce0eb2-1180-43c0-9adb-f68bcae09b47" />
 <br>
 <br>
+
 Our friend Alex [made this bounty](https://poidh.xyz/base/bounty/1282) after winning the Log a Dog challenge you saw at the top of this page. He's a legend.
 
 ---
