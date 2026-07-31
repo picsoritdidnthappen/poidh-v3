@@ -117,7 +117,6 @@ _Note: If you claim does not fit the bounty creator's requirements at all, they 
 
 ### claim card info
 <br>
-<br>
 <img width="515" height="716" alt="claim card info summary" src="https://github.com/user-attachments/assets/cdcc7e62-a5b3-4aca-acc0-652be00c1d5a" />
 <br>
 <br>
