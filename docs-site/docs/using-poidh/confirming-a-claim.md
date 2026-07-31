@@ -8,8 +8,6 @@ It's also one of the most permanent.
 
 Take your time, review every submission carefully, and make sure you're confident before moving forward.
 
-[SCREENSHOT: Bounty page showing submitted claims]
-
 ---
 
 ## review every claim
@@ -27,7 +25,12 @@ Remember that participants invested their own time and effort into these submiss
 
 It's worth giving every claim a fair review before making your decision.
 
-[SCREENSHOT: Multiple claims on a bounty]
+### pro-tip 🕹️
+
+Clicking a claim image allows you to expand all claim info, zoom in on the pic, view the claimant's poidh score, share a claim, or ban it (hide it from the page).
+
+<img width="489" height="800" alt="claim info" src="https://github.com/user-attachments/assets/7010653d-7b0b-4642-b2b2-85e8e7ee54e0" />
+
 
 ---
 
@@ -41,10 +44,11 @@ When you confirm a winner, the entire bounty reward goes to that claim.
 
 If you'd like to reward other participants for excellent work, you're always free to do so outside the protocol.
 
-Every claim displays the claimant's wallet address, and you can copy it directly from the claim by clicking the copy icon.
+Every claim contains the claimant's wallet address, and you can copy it directly from the claim by clicking the copy icon within the claim card.
 
-[SCREENSHOT: Claim showing wallet address and copy button]
-
+<img width="356" height="171" alt="Screen Shot 2026-07-31 at 1 21 53 PM" src="https://github.com/user-attachments/assets/2cbf6845-e6da-4461-bf2f-4dbf1c433ea4" />
+<br>
+<br>
 Many bounty creators choose to send small thank-you payments or consolation prizes to runners-up whose work they appreciated.
 
 Those payments happen independently of the bounty itself.
@@ -76,9 +80,23 @@ Before confirming a claim, understand that **this action cannot be undone.**
 
 Once you nominate a claim as the winner, there is no way to withdraw that nomination or choose a different claim later.
 
-[WARNING CALLOUT]
+If you are selecting a winner as the sole bounty contributor, you will click the "accept" button in the top left corner of the claim card. This will bring up the final confirmation screen. Clicking "accept claim" and confirming the transaction will finalize the bounty.
 
-**Take your time before confirming.**
+<img width="509" height="668" alt="accepting claim" src="https://github.com/user-attachments/assets/47daacc2-766b-418c-af76-96143b0367be" />
+<br>
+<br>
+
+If your bounty has multiple contributors, you will click the "propose winner" button in the top left corner of the claim card.
+
+<img width="317" height="174" alt="Screen Shot 2026-07-31 at 1 32 47 PM" src="https://github.com/user-attachments/assets/7af4fd7f-adad-4162-b530-0940e5886edc" />
+
+This will bring up the final confirmation screen before submitting the claim for vote.
+
+<img width="492" height="704" alt="Screen Shot 2026-07-31 at 1 33 25 PM" src="https://github.com/user-attachments/assets/17ebe335-4135-4cc9-80d3-479b10b4b789" />
+
+Clicking "submit claim" and confirming the transaction will officially start the 48-hour onchain vote.
+
+### take your time before confirming
 
 Double-check the evidence.
 
@@ -96,13 +114,7 @@ If your bounty is a **solo bounty**, confirming a winner immediately completes t
 
 The full reward is transferred to the winning claimant's wallet.
 
-There is no additional review step.
-
-[DIAGRAM: Confirm winner → Funds transferred]
-
-Once this happens, the bounty is complete.
-
-The funds cannot be recalled through the protocol.
+There is no additional review step. Once this happens, the bounty is complete and the funds cannot be recalled through the protocol.
 
 ---
 
@@ -111,8 +123,6 @@ The funds cannot be recalled through the protocol.
 If your bounty has additional contributors, confirming a winner doesn't immediately transfer the funds.
 
 Instead, your selected claim is **nominated for approval** by the bounty's contributors.
-
-[DIAGRAM: Confirm winner → Contributor approval]
 
 This is the final step before the reward is distributed.
 
@@ -136,11 +146,7 @@ That means your nomination effectively determines the outcome of the bounty.
 
 Don't treat nomination as a "draft."
 
-Treat it as your final decision.
-
-[WARNING CALLOUT]
-
-There is no "undo" button.
+Treat it as your final decision. There is no "undo" button.
 
 ---
 
@@ -168,7 +174,7 @@ But good communication often leads to smoother outcomes.
 
 ## before you confirm
 
-Before clicking **Confirm Winner**, ask yourself:
+Before choosing a winner ask yourself:
 
 **Have I reviewed every claim?**
 
@@ -179,8 +185,6 @@ Before clicking **Confirm Winner**, ask yourself:
 **If this is an open bounty, have I considered discussing the decision with other contributors first?**
 
 If the answer to all of those questions is yes, you're ready to move forward.
-
-[SCREENSHOT: Confirm winner dialog]
 
 ---
 
