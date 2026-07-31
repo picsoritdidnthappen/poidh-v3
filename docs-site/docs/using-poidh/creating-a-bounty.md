@@ -256,6 +256,14 @@ Your bounty can now be:
 
 Your bounty has gone from an idea to an open invitation for someone to make that idea happen.
 
+## cancelling a bounty
+
+Bounties can be cancelled at any time _as long as they are not under vote_. To do so, connect your wallet that created the bounty, click the "cancel" button that appears on the bounty page, and confirm your transaction.
+
+This will update the bounty page to read "cancelled", and your funds will be available to withdraw via your profile page. If the bounty had multiple contributors, they will be able to claim their funds via their respective profile pages.
+
+There are no fees associated with cancelling a bounty.
+
 ---
 
 # tips for creating great bounties
