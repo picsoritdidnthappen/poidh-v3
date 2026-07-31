@@ -115,6 +115,27 @@ If a bounty only has a single contributor, there is no voting period and you rec
 
 _Note: If you claim does not fit the bounty creator's requirements at all, they may hide it. If this happens, consider reaching out to them directly to find out why the claim was hidden and to ask if you can resubmit the claim with more information._
 
+### claim card info
+
+<img width="515" height="716" alt="claim card info summary" src="https://github.com/user-attachments/assets/cdcc7e62-a5b3-4aca-acc0-652be00c1d5a" />
+<br>
+<br>
+All of the following information is included within a claim card and can be used during the evaluation process:
+
+- Claim image
+- Claim title
+- Claim description (including external links to URLs if provided)
+- Claim id (specific to the chain the claim was minted on)
+- Claim issuer with multiple formats available including:
+  - Raw wallet address
+  - ENS name
+  - GNS name
+  - WNS name
+  - Farcaster username + profile picture
+- Farcaster profile link (if attached to wallet address)
+- X profile link (if linked to wallet address via Farcaster)
+- Country (if [ZKPassport](https://zkpassport.id/) verified)
+
 ---
 
 ## if there are multiple claims
