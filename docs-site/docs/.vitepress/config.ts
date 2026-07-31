@@ -6,30 +6,23 @@ export default defineConfig({
   description: 'Secure bounty protocol with social crowdfunding, weighted polling, and pull-payments',
   sitemap: { hostname: 'https://docs.poidh.xyz' },
 
-  // Unified Head Configuration (Fixed duplicate key issue)
-  head: [
-    ['script', { src: 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js' }],
-    ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:image', content: 'https://poidh.xyz/images/poidh-preview-hero-v2.png' }],
-    ['meta', { property: 'og:description', content: 'Secure bounty protocol with social crowdfunding, weighted polling, and pull-payments' }],
-    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
-    ['meta', { name: 'twitter:image', content: 'https://poidh.xyz/images/poidh-preview-hero-v2.png' }],
-    ['meta', { name: 'twitter:description', content: 'Secure bounty protocol with social crowdfunding, weighted polling, and pull-payments' }]
-  ],
-
-  // Dynamic meta tags for individual markdown sub-pages
+  // Dynamic meta tags for sub-pages
   transformPageData(pageData) {
     const title = pageData.frontmatter.title || pageData.title || 'poidh docs';
-    const description = pageData.frontmatter.description || pageData.description || 'Secure bounty protocol with social crowdfunding, weighted polling, and pull-payments';
-    
+    const description = pageData.frontmatter.description || pageData.description || '...';
     pageData.frontmatter.head = [
       ...(pageData.frontmatter.head || []),
       ['meta', { property: 'og:title', content: title }],
-      ['meta', { property: 'og:description', content: description }],
-      ['meta', { name: 'twitter:title', content: title }],
-      ['meta', { name: 'twitter:description', content: description }]
+      ['meta', { name: 'twitter:title', content: title }]
     ]
   },
+
+  head: [
+    ['meta', { property: 'og:image', content: 'https://poidh.xyz/images/poidh-preview-hero-v2.png' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:image', content: 'https://poidh.xyz/images/poidh-preview-hero-v2.png' }],
+    ['script', { src: 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js' }]
+  ],
 
   themeConfig: {
     nav: [
@@ -114,10 +107,6 @@ export default defineConfig({
       provider: 'local'
     }
   },
-
-  head: [
-    ['script', { src: 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js' }]
-  ],
 
   markdown: {
     theme: {
