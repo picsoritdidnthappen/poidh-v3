@@ -116,7 +116,8 @@ If a bounty only has a single contributor, there is no voting period and you rec
 _Note: If you claim does not fit the bounty creator's requirements at all, they may hide it. If this happens, consider reaching out to them directly to find out why the claim was hidden and to ask if you can resubmit the claim with more information._
 
 ### claim card info
-
+<br>
+<br>
 <img width="515" height="716" alt="claim card info summary" src="https://github.com/user-attachments/assets/cdcc7e62-a5b3-4aca-acc0-652be00c1d5a" />
 <br>
 <br>
