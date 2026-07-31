@@ -2,9 +2,25 @@ import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   ignoreDeadLinks: true, 
-  
   title: 'poidh docs',
   description: 'Secure bounty protocol with social crowdfunding, weighted polling, and pull-payments',
+  sitemap: { hostname: 'https://docs.poidh.xyz' },
+
+  // Dynamic meta tags for sub-pages
+  transformPageData(pageData) {
+    const title = pageData.frontmatter.title || pageData.title || 'poidh docs';
+    const description = pageData.frontmatter.description || pageData.description || '...';
+    pageData.frontmatter.head = [
+      ...(pageData.frontmatter.head || []),
+      ['meta', { property: 'og:title', content: title }],
+      ['meta', { name: 'twitter:title', content: title }]
+    ]
+  },
+
+  head: [
+    ['meta', { property: 'og:image', content: 'https://poidh.xyz/images/poidh-preview-hero-v2.png' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }]
+  ],
 
   themeConfig: {
     nav: [
