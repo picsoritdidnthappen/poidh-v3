@@ -123,7 +123,6 @@
 .VPNav {
   background: var(--vp-c-bg);
   border-bottom: 1px solid var(--vp-c-border);
-  backdrop-filter: blur(12px);
 }
 
 /* Mermaid Diagrams */
