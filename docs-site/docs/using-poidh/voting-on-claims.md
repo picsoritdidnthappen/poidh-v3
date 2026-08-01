@@ -260,7 +260,7 @@ If you don't have enough information to make a decision, you can simply abstain 
 
 ---
 
-# coordination without centralized control
+## coordination without centralized control
 
 The voting process exists to protect everyone involved.
 
@@ -279,3 +279,10 @@ Find the best submission.
 Verify it together.
 Reward the work.**
 
+---
+
+## relevant github files
+
+* https://github.com/picsoritdidnthappen/poidh-app/blob/prod/src/components/bounty/Voting.tsx
+* https://github.com/picsoritdidnthappen/poidh-app/tree/prod/src/components/claims
+* https://github.com/picsoritdidnthappen/poidh-app/tree/prod/src/components/bounty
