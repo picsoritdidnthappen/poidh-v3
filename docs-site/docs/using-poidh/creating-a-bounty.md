@@ -352,4 +352,4 @@ Then you open it to the internet and see what happens.
 
 ## relevant github files
 
-[FormBounty.tsx](https://github.com/picsoritdidnthappen/poidh-app/blob/prod/src/components/bounty/FormBounty.tsx)
+https://github.com/picsoritdidnthappen/poidh-app/tree/prod/src/components/bounty
