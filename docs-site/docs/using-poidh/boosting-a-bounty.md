@@ -191,7 +191,7 @@ Once you've confirmed those details, you're ready to boost.
 
 ---
 
-# help make something happen
+## help make something happen
 
 You don't need to create every bounty you want to see succeed.
 
@@ -202,3 +202,9 @@ If you think it should happen, **boost it.**
 You're putting money behind the outcome, making the reward more attractive to potential claimants, and gaining a stake in verifying the result.
 
 **Find something worth doing. Put more money behind it. Help decide whether it gets done.**
+
+---
+
+## relevant github files
+
+https://github.com/picsoritdidnthappen/poidh-app/tree/prod/src/components/bounty
