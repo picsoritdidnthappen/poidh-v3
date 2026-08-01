@@ -1,4 +1,4 @@
-# getting paid
+# getting paid 💸
 
 Congratulations!
 
