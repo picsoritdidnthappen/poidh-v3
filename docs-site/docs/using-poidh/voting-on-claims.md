@@ -1,4 +1,4 @@
-# voting on claims
+# voting on claims 🗳️
 
 Open bounties allow multiple people to fund the same outcome.
 
