@@ -278,7 +278,7 @@ But clear photos, organized evidence, and thoughtful explanations make your clai
 
 ---
 
-# a claim is your proof
+## a claim is your proof
 
 On poidh, completing the work is only part of the process.
 
@@ -293,3 +293,9 @@ It connects every piece of evidence to the bounty's requirements.
 And it gives the community confidence that the requested outcome really happened.
 
 **Do the work. Show the evidence. Make your case.**
+
+---
+
+## relevant github files
+
+https://github.com/picsoritdidnthappen/poidh-app/tree/prod/src/components/claims
