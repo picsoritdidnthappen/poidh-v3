@@ -131,7 +131,7 @@ Our friend Alex [made this bounty](https://poidh.xyz/base/bounty/1282) after win
 
 ---
 
-# enjoy your reward
+## enjoy your reward
 
 You've completed the work.
 
@@ -150,3 +150,9 @@ Enjoy it.
 And if you're feeling lucky...
 
 **Pay a little of it forward. It's good luck. 🍀**
+
+---
+
+## relevant github files
+
+https://github.com/picsoritdidnthappen/poidh-app/tree/prod/src/components/account
