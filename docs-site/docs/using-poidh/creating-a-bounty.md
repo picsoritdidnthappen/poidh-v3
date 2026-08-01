@@ -44,37 +44,31 @@ A good description should make clear:
 * **What counts as completion**
 * **What evidence is required**
 
-### example: find a great third space
+### example: find a business with a Cascadia flag 🌲
 
 Here's an example of a well-designed bounty:
 
-> **Not every great place is optimized for speed.**
+> Somewhere out there, businesses across Cascadia are quietly showing their love for the region by displaying the Cascadia flag (the Doug flag with the Douglas fir). Your mission is to find one.
 >
-> Some spots are meant for slowing down—where the WiFi is questionable, but the coffee or tea is excellent, the books are plentiful, and the atmosphere makes you want to stay awhile.
+> Visit a business that has the Cascadia flag displayed somewhere publicly — on a wall, in a window, behind the counter, outside the building, etc. Take a photo of it yourself (no images pulled from Google or social media).
 >
-> We want to highlight those spaces.
+> Post the photo on Instagram, TikTok, or X and tag both the business and @poidhxyz in the post so they can see it. Include a short caption mentioning Cascadia.
 >
-> Your mission is simple: find an existing, active café / tea shop / bookstore-style third space that fits the vibe (shitty WiFi, great drinks, lots of books), and give it the recognition it deserves.
+> The photo should clearly show the Cascadia flag and make it obvious that it’s inside or outside a real business location.
 >
-> Leave a thoughtful review on its Google Business Profile that captures the feeling of the space and why it stands out.
+> To claim the bounty, submit the photo you took + the link to your social media post.
 >
-> **To complete the bounty:**
+> **A few rules:**
 >
-> * Write a Google review for an active business that fits the “third space” vibe
-> * Include **new photos** in your review — no old photos from previous visits; photos must reflect the current state of the business
-> * Include a subtle **“poidh” easter egg** somewhere in at least one photo — written on paper, visible on a laptop screen, etc. It should not be the main focus, but it must be findable
-> * Upload one of your photos to the bounty page
-> * Include a link to the Google Business Profile where your review is posted so it can be verified
+> * The photo must be taken by you.
+> * It must show a Cascadia flag displayed at a business.
+> * The post must tag the business and @poidhxyz.
 >
-> Submissions without new photo evidence, a valid review link, or a visible “poidh” easter egg will not be accepted. The Google Business Profile must be active—no brand-new profiles or inactive businesses.
->
-> Let’s surface the places that prioritize presence over productivity ☕🌿
->
-> **First legit claim wins. 🏆**
+> First legit claim wins. Viva Cascadia. 🌲
 
 This is a strong bounty because it combines a **clear objective** with **specific, observable requirements**.
 
-The participant has freedom to decide which café, tea shop, or bookstore to visit and how to approach the review. But there is no ambiguity about what a successful claim needs to contain.
+The participant has freedom to decide which business to visit and how to approach the social media post. But there is no ambiguity about what a successful claim needs to contain.
 
 ---
 
@@ -92,7 +86,7 @@ A useful way to evaluate your bounty before publishing is the **poidh framework*
 
 **horizoned**: Does the bounty have a clear sense of when or under what conditions the opportunity ends?
 
-The third-space bounty demonstrates the first four particularly well, while its **“First legit claim wins”** condition creates a clear competitive endpoint.
+The Cascadia bounty demonstrates the first four particularly well, while its **“First legit claim wins”** condition creates a clear competitive endpoint.
 
 Note, the bounty description field on is Markdown-friendly and you can utilize the "preview" toggle to see what your bounty will look like when published.
 
@@ -280,28 +274,11 @@ Start with:
 
 Then work backward from that outcome.
 
-The third-space bounty isn't fundamentally about writing Google reviews.
+The Cascadia bounty isn't fundamentally about writing a social media post.
 
-The desired outcome is to **surface and recognize places that prioritize presence over productivity**.
+The desired outcome is to **surface and recognize businesses that celebrate the Cascadia bioregion**.
 
-The review is the mechanism for making that happen.
-
-## give participants room to solve the problem
-
-Define the outcome and constraints without prescribing every step.
-
-The third-space bounty doesn't tell participants:
-
-* Which café to visit
-* What to order
-* Where to sit
-* What exact words to write
-* What camera to use
-* How to compose their photos
-
-It defines what needs to be true and lets the participant figure out how to get there.
-
-That makes the bounty an **incentive to solve a problem**, rather than a rigid instruction manual.
+The social media post is simply the mechanism for making that happen.
 
 ## make success observable
 
@@ -312,24 +289,6 @@ Ask yourself:
 > **What would convince a skeptical person that this actually happened?**
 
 Your answer should inform the proof requirements.
-
-## use requirements that work together
-
-The strongest bounties often have several requirements that reinforce each other.
-
-In the third-space example:
-
-**Visit the business**
-↓
-**Document its current state**
-↓
-**Write a thoughtful review**
-↓
-**Include a bounty-specific easter egg**
-↓
-**Submit evidence that lets others verify the whole thing**
-
-Each requirement contributes something different to the overall proof.
 
 ## don't add requirements just for the sake of requirements
 
@@ -393,4 +352,4 @@ Then you open it to the internet and see what happens.
 
 ## relevant github files
 
-https://github.com/picsoritdidnthappen/poidh-app/blob/prod/src/components/bounty/FormBounty.tsx
+[FormBounty.tsx](https://github.com/picsoritdidnthappen/poidh-app/blob/prod/src/components/bounty/FormBounty.tsx)
