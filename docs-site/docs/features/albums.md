@@ -16,7 +16,7 @@ _[We Them Media](https://poidh.xyz/a/wethemmedia) maintains one of the most acti
 
 <br>
 
-<img width="1472" height="888" alt="Screen Shot 2026-08-01 at 2 58 58 PM" src="https://github.com/user-attachments/assets/2215bda5-b6d6-49b7-8f4a-b00b68ab19b3" />
+<img width="1200" height="724" alt="public goods album poidh" src="https://github.com/user-attachments/assets/fb7b2c5f-fb27-4480-93e1-6b6f9b560282" />
 
 _The [public goods album](https://poidh.xyz/a/publicgoods) is where we organize bounties focused on improving local communities_
 
