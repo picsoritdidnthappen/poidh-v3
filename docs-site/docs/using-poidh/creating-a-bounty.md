@@ -367,7 +367,7 @@ If the answer is no, improve the bounty before publishing.
 
 ---
 
-# a bounty is an invitation
+## a bounty is an invitation
 
 The best poidh bounties don't feel like chores.
 
@@ -388,3 +388,9 @@ A great bounty combines:
 Then you open it to the internet and see what happens.
 
 **Create something worth doing. Put money behind it. Let someone make it happen.**
+
+---
+
+## relevant github files
+
+https://github.com/picsoritdidnthappen/poidh-app/blob/prod/src/components/bounty/FormBounty.tsx
