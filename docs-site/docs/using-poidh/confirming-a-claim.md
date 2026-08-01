@@ -1,4 +1,4 @@
-# confirming a claim
+# confirming a claim ✅
 
 Once claims have been submitted, it's up to the bounty creator to decide which one best fulfills the bounty.
 
