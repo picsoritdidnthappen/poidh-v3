@@ -188,7 +188,7 @@ If the answer to all of those questions is yes, you're ready to move forward.
 
 ---
 
-# confirmation completes the coordination
+## confirmation completes the coordination
 
 Creating a bounty begins the coordination process.
 
@@ -203,3 +203,9 @@ Review the evidence.
 Reward the best work.
 
 Then let the protocol handle the rest.
+
+---
+
+## relevant github files
+
+https://github.com/picsoritdidnthappen/poidh-app/tree/prod/src/components/claims
