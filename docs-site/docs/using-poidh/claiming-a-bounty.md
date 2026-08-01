@@ -1,4 +1,4 @@
-# claiming a bounty
+# claiming a bounty 🖼️
 
 A claim is your submission showing that you've successfully completed a bounty.
 
