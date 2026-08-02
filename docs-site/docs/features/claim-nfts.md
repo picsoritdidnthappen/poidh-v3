@@ -139,7 +139,7 @@ _Just a portion of poidh OG [eljuniordiaz.eth's NFT collection](https://poidh.xy
 
 ---
 
-## could claim NFTs become valuable?
+## are claim NFTs valuable?
 
 The poidh team makes no promises about the present or future value of any claim NFT.
 
