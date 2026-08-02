@@ -117,9 +117,9 @@ Rather than collecting random images, bounty creators collect proof of the real-
 
 ## collecting the outcomes you created
 
-One of the most unique aspects of poidh is that bounty creators don't simply pay for work.
+Every accepted bounty permanently transfers both the payment and the proof in a single transaction. The claimant receives the reward, while the bounty creator receives the poidh NFT representing the completed work. All other claims are, effectively, burned, as there is no other way to retrieve an NFT from the contract other than selecting it as a bounty winner.
 
-They collect the proof that the work happened.
+Bounty creators collect the proof that they made something happen in the world.
 
 When you create a bounty, you're building a collection of outcomes you've helped bring into existence.
 
