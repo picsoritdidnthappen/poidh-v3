@@ -21,7 +21,7 @@ This includes:
 
 Together, these details help contributors quickly understand what work is being requested and where it lives onchain.
 
-[SCREENSHOT: Bounty header]
+<img width="814" height="529" alt="battle bronx bounty" src="https://github.com/user-attachments/assets/245d9b68-fc80-495f-ae06-1f9a47216593" />
 
 ---
 
@@ -40,7 +40,7 @@ Depending on what they've chosen to share, a profile may include:
 
 Checking a creator's profile can provide valuable context, especially when participating in larger or long-running community initiatives.
 
-[SCREENSHOT: Creator profile]
+<img width="1081" height="663" alt="profile page poidh" src="https://github.com/user-attachments/assets/50272912-dfd6-4087-a58e-97e762b8322b" />
 
 ---
 
@@ -69,15 +69,15 @@ This includes people who have:
 * Submitted claims
 * Contributed in other ways
 
-It's a useful way to see who is helping drive a bounty forward and understand how many people are involved in a particular effort.
+It's a useful way to see who is helping drive a bounty forward and understand how many people are involved in a particular effort. Clicking a contributor's username from this tab also allows you to see their respective profile pages.
 
-[SCREENSHOT: Contributors tab]
+<img width="825" height="709" alt="contributors" src="https://github.com/user-attachments/assets/c6b2c5af-0d1d-478f-994e-3f6b3d890ec8" />
 
 ---
 
 ## transaction history
 
-Every bounty includes a **Transactions** tab that records important activity throughout its lifetime.
+Every bounty includes a **Transactions** tab that records important bounty activity and the date that it happened.
 
 Rather than hiding what happened behind the scenes, poidh provides a transparent history of the bounty's progression.
 
@@ -91,9 +91,9 @@ Depending on the bounty, you'll see events such as:
 * Completed payouts
 * Other important protocol events
 
-Each blockchain transaction links directly to the appropriate block explorer, making it easy to independently verify every onchain action.
+Clicking any transaction will link you directly to the appropriate block explorer, making it easy to independently verify every onchain action.
 
-[SCREENSHOT: Transactions tab]
+<img width="661" height="893" alt="transaction history" src="https://github.com/user-attachments/assets/1a7c7c93-ea2b-42f8-bbd4-8e9bf10f750a" />
 
 ---
 
