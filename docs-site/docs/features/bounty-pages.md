@@ -27,7 +27,15 @@ Together, these details help contributors quickly understand what work is being 
 
 ## bounty creator
 
-Every bounty displays the wallet that created it.
+Every bounty displays the profile of the wallet that created it.
+
+If the wallet happens to have a connected Farcaster account, it will display the user's Farcaster profile photo. It will also display a Farcaster logo you can click to visit the Farcaster profile in question. If the user also has an X account connected to their Farcaster account, the profile will be linked via an X logo.
+
+If the wallet has no associated Farcaster account, but an associated ENS, GNS, WNS, or DNS, it will display that name.
+
+If it has no associated Farcaster or wallet name service, it will simply display a raw wallet address.
+
+Clicking the "copy" icon next to the creator will copy the wallet address that created the bounty to your clipboard.
 
 Clicking the creator's profile lets you learn more about them before deciding whether to participate.
 
@@ -75,6 +83,12 @@ It's a useful way to see who is helping drive a bounty forward and understand ho
 
 ---
 
+## adding funds
+
+Please our dedicate page on [boosting bounties here](/using-poidh/boosting-a-bounty). 
+
+---
+
 ## transaction history
 
 Every bounty includes a **Transactions** tab that records important bounty activity and the date that it happened.
@@ -107,7 +121,7 @@ This generates a shareable link you can post anywhere, making it easy to invite 
 
 The more visibility a bounty receives, the more likely it is to attract high-quality contributions.
 
-[SCREENSHOT: Share button]
+<img width="440" height="432" alt="share module" src="https://github.com/user-attachments/assets/e90cdba0-c7f1-4809-9586-badbac56a2c9" />
 
 ---
 
