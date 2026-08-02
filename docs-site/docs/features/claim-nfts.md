@@ -61,8 +61,6 @@ Unlike a traditional web application where uploaded files live on a company's se
 
 Combined with the NFT itself, this creates a durable record of both the evidence and the onchain transaction associated with every completed bounty.
 
-[SCREENSHOT: NFT metadata showing IPFS media]
-
 ---
 
 ## more than proof
