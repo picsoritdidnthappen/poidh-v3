@@ -63,26 +63,6 @@ Combined with the NFT itself, this creates a durable record of both the evidence
 
 ---
 
-## more than proof
-
-Most bounty platforms treat completed work as something temporary.
-
-A task is completed.
-
-The contributor gets paid.
-
-The evidence eventually disappears into old forum posts, cloud storage, or forgotten chat messages.
-
-poidh takes a different approach.
-
-The proof itself becomes the collectible.
-
-Every completed bounty produces a permanent artifact representing a specific moment in time.
-
-Instead of disappearing after payment, the contribution becomes part of an onchain historical record.
-
----
-
 ## why mint claims as NFTs?
 
 There are several reasons every claim becomes an NFT.
@@ -107,7 +87,7 @@ By attaching evidence to an NFT, poidh creates a durable, verifiable record conn
 
 It's a simple idea inspired by an internet meme that most people already understand:
 
-**Pics or it didn't happen.**
+**pics or it didn't happen.**
 
 ---
 
@@ -153,7 +133,9 @@ Each completed bounty leaves behind a collectible representing that contribution
 
 Over time, your collection tells the story of what you've chosen to incentivize.
 
-[SCREENSHOT: Wallet containing multiple claim NFTs]
+<img width="832" height="896" alt="eljunior poidh profile" src="https://github.com/user-attachments/assets/186a5217-bd4d-4be3-b2b9-16510085b61a" />
+
+_Just a portion of poidh OG [eljuniordiaz.eth's NFT collection](https://poidh.xyz/account/0x71cbbe6ecf1a9c4d8b9115757ebcc5ff45902177?tab=nfts)_
 
 ---
 
@@ -187,19 +169,9 @@ The collectible itself doesn't create the significance.
 
 The underlying action does.
 
-As poidh grows, some claim NFTs may become meaningful historical artifacts for the communities that created them.
+As poidh grows, some claim NFTs may become meaningful historical artifacts for the communities that created them. 
 
----
-
-## social proof
-
-Claim NFTs are also social objects.
-
-Every NFT links back to the people involved in making it happen.
-
-Connected profiles like X and Farcaster help establish who completed the work, while public wallet addresses provide transparent ownership history.
-
-Rather than existing in isolation, each NFT connects contributors, bounty creators, and communities into a shared record of collaboration.
+With this in mind, we plan to build a future marketplace for poidh NFTs in-app allowing users to browse, list, and buy the most popular claims in app history.
 
 ---
 
@@ -218,4 +190,10 @@ They combine proof, provenance, payment, and participation into a single onchain
 Every completed bounty leaves behind more than a transaction.
 
 It leaves behind a permanent record of coordination.
+
+---
+
+## relevant github files
+
+https://github.com/picsoritdidnthappen/poidh-app/tree/prod/src/components/claims
 
