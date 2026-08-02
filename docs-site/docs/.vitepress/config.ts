@@ -57,9 +57,10 @@ export default defineConfig({
         text: 'features',
         collapsed: false,
         items: [
-          { text: 'albums', link: '/features/albums' },
-          { text: 'profiles', link: '/features/profiles' },
+          { text: 'bounty pages', link: '/features/bounty-pages' },
           { text: 'claim nfts', link: '/features/claim-nfts' },
+          { text: 'profiles', link: '/features/profiles' },
+          { text: 'albums', link: '/features/albums' },
           { text: 'poidh score', link: '/features/poidh-score' }
         ]
       },
