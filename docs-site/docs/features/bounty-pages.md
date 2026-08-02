@@ -121,7 +121,7 @@ Each claim contains the contributor's evidence and any discussion related to tha
 
 From here, community members can review claims, participate in voting when applicable, and follow the progress of each submission.
 
-[SCREENSHOT: Claims list]
+<img width="1626" height="711" alt="claim images" src="https://github.com/user-attachments/assets/478fdb22-5bc9-4c8a-8c9c-7ed9d693ab1b" />
 
 ---
 
@@ -135,7 +135,7 @@ To leave a comment, simply connect your wallet and sign a message.
 
 Signing proves ownership of your wallet without creating an onchain transaction or requiring any gas fees.
 
-[SCREENSHOT: Comments section]
+<img width="908" height="713" alt="comment section" src="https://github.com/user-attachments/assets/063ba310-3727-4c5f-864c-d21a8f99f593" />
 
 ---
 
@@ -146,3 +146,9 @@ A bounty page is designed to provide complete transparency throughout the lifecy
 Whether you're evaluating the creator, reviewing submitted work, tracking onchain activity, or participating in discussions, everything you need is available from a single page.
 
 As poidh continues to evolve, bounty pages will gain additional tools that make coordinating, reviewing, and completing work even easier.
+
+---
+
+## relevant github files
+
+https://github.com/picsoritdidnthappen/poidh-app/tree/prod/src/components/bounty
