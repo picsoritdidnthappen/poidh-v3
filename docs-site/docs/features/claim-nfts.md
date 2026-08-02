@@ -119,17 +119,13 @@ Rather than collecting random images, bounty creators collect proof of the real-
 
 Every accepted bounty permanently transfers both the payment and the proof in a single transaction. The claimant receives the reward, while the bounty creator receives the poidh NFT representing the completed work. All other claims are, effectively, burned, as there is no other way to retrieve an NFT from the contract other than selecting it as a bounty winner.
 
-Bounty creators collect the proof that they made something happen in the world.
-
-When you create a bounty, you're building a collection of outcomes you've helped bring into existence.
+Bounty creators collect the proof that they made something happen in the world. When you create a bounty, you're building a collection of outcomes you've helped bring into existence.
 
 Maybe it's a new open source feature.
 
 Maybe it's a successful community event.
 
 Maybe it's artwork, research, photography, or something that changed a local neighborhood.
-
-Each completed bounty leaves behind a collectible representing that contribution.
 
 Over time, your collection tells the story of what you've chosen to incentivize.
 
@@ -171,7 +167,7 @@ The underlying action does.
 
 As poidh grows, some claim NFTs may become meaningful historical artifacts for the communities that created them. 
 
-With this in mind, we plan to build a future marketplace for poidh NFTs in-app allowing users to browse, list, and buy the most popular claims in app history.
+Looking ahead, we plan to build an in-app marketplace where users can browse, collect, list, and trade claim NFTs. Our goal is to make historically significant claims easier to discover and preserve over time.
 
 ---
 
