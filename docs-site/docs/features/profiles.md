@@ -107,7 +107,7 @@ Reviewing someone's previous claims is a great way to understand the quality of 
 
 Each claim links directly back to its original bounty, making it easy to explore the full context surrounding every submission.
 
-I red "accepted" badge also appears on any claim that was selected as the winner of a bounty.
+A red "accepted" badge also appears on any claim that was selected as the winner of a bounty.
 
 <img width="1000" alt="claims from hank" src="https://github.com/user-attachments/assets/da4e1ef8-4067-454a-bf5d-84acfa75d1ae" />
 
