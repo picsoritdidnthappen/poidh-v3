@@ -8,8 +8,6 @@ Rather than representing financial wealth or token ownership, a poidh score refl
 
 You'll see poidh scores throughout the application, making it easy to understand how active someone has been before collaborating with them.
 
-[SCREENSHOT: Profile page showing poidh score]
-
 ---
 
 ## how poidh score is calculated
@@ -58,29 +56,29 @@ Every profile displays a user's current poidh score alongside their activity, co
 
 This provides a quick overview of someone's history within the protocol.
 
-[SCREENSHOT: Profile page]
+<img width="708" height="401" alt="good poidh score" src="https://github.com/user-attachments/assets/7aa84ec5-f126-4663-879e-70e5760684f9" />
 
 ---
 
 ### claim NFTs
 
-Clicking on a claim expands the NFT and displays additional information about the contributor, including their poidh score.
+Clicking on a claim image expands the NFT and displays additional information about the contributor, including their poidh score.
 
 This helps reviewers better understand the history of the person submitting the claim while keeping the focus on the evidence itself.
 
-[SCREENSHOT: Expanded claim showing score]
+<img width="478" height="809" alt="claim score" src="https://github.com/user-attachments/assets/3f041d4c-13dd-441b-b872-800cf4d6cb19" />
 
 ---
 
 ### leaderboard
 
-The **Leaderboard** ranks participants by poidh score across every supported blockchain.
+The [poidh leaderboard page](https://poidh.xyz/leaderboard) ranks participants by poidh score across every supported blockchain.
 
 Scores are broken down by network—including Ethereum Mainnet, Base, Arbitrum, and Degen—alongside a combined total.
 
 Each entry links directly to the user's profile, making it easy to explore the people contributing most actively across the protocol.
 
-[SCREENSHOT: Leaderboard page]
+<img width="1343" height="874" alt="poidh high scores" src="https://github.com/user-attachments/assets/2a54cad9-b633-4e71-8869-7a2763cbffe9" />
 
 ---
 
