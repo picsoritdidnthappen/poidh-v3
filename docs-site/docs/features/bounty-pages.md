@@ -85,7 +85,7 @@ It's a useful way to see who is helping drive a bounty forward and understand ho
 
 ## adding funds
 
-Please our dedicate page on [boosting bounties here](/using-poidh/boosting-a-bounty). 
+Please visit our dedicate page on [boosting bounties](/using-poidh/boosting-a-bounty). 
 
 ---
 
