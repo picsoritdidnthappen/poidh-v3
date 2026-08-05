@@ -61,7 +61,7 @@ forge script script/Deploy.s.sol:Deploy --rpc-url <RPC_URL> --broadcast
 
 ## Next Steps
 
-- Explore the [architecture](/architecture) to understand the system design
-- Review [state machines](/state-machines) for protocol flows
-- Study [security considerations](/security) for threat models
-- Check the [API reference](/api) for contract interfaces
+- Explore the [architecture](/contracts/architecture) to understand the system design
+- Review [state machines](/contracts/state-machines) for protocol flows
+- Study [security considerations](/contracts/security) for threat models
+- Check the [API reference](/contracts/api) for contract interfaces
