@@ -2,13 +2,15 @@
 
 ## Pre-Deployment Checklist
 
-- [ ] All tests passing (`forge test -vvv`)
-- [ ] Coverage >95% (`forge coverage`)
-- [ ] Fuzz tests passed (`FOUNDRY_FUZZ_RUNS=10000 forge test`)
-- [ ] Invariant tests passed (`FOUNDRY_INVARIANT_RUNS=2000 forge test`)
-- [ ] Security review completed
-- [ ] Treasury address configured
-- [ ] Parameters validated
+* [ ] All tests passing (`forge test -vvv`)
+* [ ] Coverage >95% (`forge coverage`)
+* [ ] Fuzz tests passed (`FOUNDRY_FUZZ_RUNS=10000 forge test`)
+* [ ] Invariant tests passed (`FOUNDRY_INVARIANT_RUNS=2000 forge test`)
+* [ ] Security review completed
+* [ ] Treasury address configured
+* [ ] Parameters validated
+
+---
 
 ## Environment Variables
 
@@ -19,14 +21,16 @@ export POIDH_START_CLAIM_INDEX=1      # Starting claim ID (must be >= 1)
 
 # Optional (with defaults)
 export POIDH_MIN_BOUNTY_AMOUNT=1000000000000000      # 0.001 ETH
-export POIDH_MIN_CONTRIBUTION=10000000000000        # 0.00001 ETH
+export POIDH_MIN_CONTRIBUTION=10000000000000         # 0.00001 ETH
 export POIDH_NFT_NAME="poidh claims v3"
 export POIDH_NFT_SYMBOL="POIDH3"
 
 # Deployment
 export DEPLOYER_PK="0x..."            # Deployer private key
-export RPC_URL="https://..."           # Chain RPC URL
+export RPC_URL="https://..."          # Chain RPC URL
 ```
+
+---
 
 ## Deployment Scripts
 
@@ -41,9 +45,7 @@ forge script script/Deploy.s.sol:Deploy \
   -vvv
 ```
 
-### Chain-Specific Deployments
-
-#### Base
+### Base
 
 ```bash
 forge script script/deploy/Base.s.sol:DeployBase \
@@ -54,7 +56,7 @@ forge script script/deploy/Base.s.sol:DeployBase \
   --etherscan-api-key $BASESCAN_API_KEY
 ```
 
-#### Arbitrum
+### Arbitrum
 
 ```bash
 forge script script/deploy/Arbitrum.s.sol:DeployArbitrum \
@@ -64,7 +66,7 @@ forge script script/deploy/Arbitrum.s.sol:DeployArbitrum \
   --verify
 ```
 
-#### Base Sepolia (Testnet)
+### Base Sepolia
 
 ```bash
 forge script script/deploy/BaseSepolia.s.sol:DeployBaseSepolia \
@@ -73,6 +75,8 @@ forge script script/deploy/BaseSepolia.s.sol:DeployBaseSepolia \
   --broadcast \
   --verify
 ```
+
+---
 
 ## Post-Deployment Steps
 
@@ -135,135 +139,185 @@ cast logs --from-block <DEPLOYMENT_BLOCK> \
 cast balance <CONTRACT_ADDRESS> --rpc-url $RPC_URL
 ```
 
+---
+
 ## Configuration
 
 ### Minimum Amounts
 
-| Chain | MIN_BOUNTY_AMOUNT | MIN_CONTRIBUTION |
-|-------|-------------------|------------------|
-| Arbitrum | 0.001 ETH | 0.00001 ETH |
-| Base | 0.001 ETH | 0.00001 ETH |
-| Degen Chain | 1000 DEGEN | 10 DEGEN |
-| Ethereum Mainnet | 0.001 ETH | 0.00001 ETH |
+**Ethereum Mainnet**
+
+* Minimum bounty: **0.001 ETH**
+* Minimum contribution: **0.00001 ETH**
+
+**Base**
+
+* Minimum bounty: **0.001 ETH**
+* Minimum contribution: **0.00001 ETH**
+
+**Arbitrum**
+
+* Minimum bounty: **0.001 ETH**
+* Minimum contribution: **0.00001 ETH**
+
+**DEGEN Chain**
+
+* Minimum bounty: **1000 DEGEN**
+* Minimum contribution: **10 DEGEN**
 
 ### Voting Period
 
-- Default: 2 days
-- Adjustable by: `resetVotingPeriod()`
-- Recommended: 1-7 days depending on use case
+* Default: **2 days**
+* Adjustable by calling `resetVotingPeriod()`
+* Recommended: **1–7 days** depending on the use case
 
 ### Fee Structure
 
-- Protocol fee: 2.5% (250 BPS)
-- Sent to treasury on claim acceptance
-- Deducted from bounty amount before payout
+* Protocol fee: **2.5% (250 BPS)**
+* Sent to the treasury upon claim acceptance
+* Deducted from the bounty amount before payout
+
+---
 
 ## Deployment Addresses
 
-### Mainnet
+### Ethereum Mainnet
 
-| Chain | Contract Address | Deployment Date |
-|-------|------------------|-----------------|
-| Arbitrum | [0x5555Fa783936C260f77385b4E153B9725feF1719](https://arbiscan.io/address/0x5555fa783936c260f77385b4e153b9725fef1719) | Jan-19-2026 |
-| Base | [0x5555Fa783936C260f77385b4E153B9725feF1719](https://basescan.org/address/0x5555fa783936c260f77385b4e153b9725fef1719) | Jan-19-2026 |
-| Degen Chain | [0x18E5585ca7cE31b90Bc8BB7aAf84152857cE243f](https://explorer.degen.tips/address/0x18e5585ca7ce31b90bc8bb7aaf84152857ce243f) | Jan-19-2026 |
-| Ethereum Mainnet | [0xE731dFadBFf20542E10D09D26Fc71445C70d4232](https://etherscan.io/address/0xE731dFadBFf20542E10D09D26Fc71445C70d4232) | May-13-2026 |
+* **Contract:** `0xE731dFadBFf20542E10D09D26Fc71445C70d4232`
+* **Explorer:** https://etherscan.io/address/0xE731dFadBFf20542E10D09D26Fc71445C70d4232
+* **Deployed:** May 13, 2026
 
-### Testnet
+### Base
 
-| Chain | Contract Address | Deployment Date |
-|-------|------------------|-----------------|
-| Base Sepolia | *TBD* | - |
+* **Contract:** `0x5555Fa783936C260f77385b4E153B9725feF1719`
+* **Explorer:** https://basescan.org/address/0x5555fa783936c260f77385b4e153b9725fef1719
+* **Deployed:** Jan 19, 2026
+
+### Arbitrum
+
+* **Contract:** `0x5555Fa783936C260f77385b4E153B9725feF1719`
+* **Explorer:** https://arbiscan.io/address/0x5555fa783936c260f77385b4e153b9725fef1719
+* **Deployed:** Jan 19, 2026
+
+### DEGEN Chain
+
+* **Contract:** `0x18E5585ca7cE31b90Bc8BB7aAf84152857cE243f`
+* **Explorer:** https://explorer.degen.tips/address/0x18e5585ca7ce31b90bc8bb7aaf84152857ce243f
+* **Deployed:** Jan 19, 2026
+
+### Base Sepolia
+
+* Contract: **TBD**
+
+---
 
 ## Security Considerations
 
 ### Treasury Configuration
 
-- Use multi-sig wallet
-- Consider timelock for fee changes
-- Document fee distribution strategy
+* Use a multisig wallet.
+* Consider a timelock for future fee changes.
+* Document your fee distribution strategy.
 
 ### Deployer Key
 
-- Use hardware wallet or secure KMS
-- Destroy after deployment if possible
-- Document key custody procedures
+* Use a hardware wallet or secure KMS.
+* Destroy deployment keys after use whenever possible.
+* Document key custody procedures.
 
 ### Immutable Parameters
 
-Once deployed, these cannot be changed:
-- Treasury address
-- MIN_BOUNTY_AMOUNT
-- MIN_CONTRIBUTION
-- PoidhClaimNFT contract
+The following values cannot be changed after deployment:
+
+* Treasury address
+* `MIN_BOUNTY_AMOUNT`
+* `MIN_CONTRIBUTION`
+* `PoidhClaimNFT` contract
+
+---
 
 ## Monitoring
 
-### Key Metrics to Track
+### Key Metrics
 
-- Total bounties created
-- Total claims submitted
-- Acceptance rate
-- Average bounty size
-- Total protocol fees collected
-- Gas usage trends
+Monitor:
 
-### Alert Configuration
+* Total bounties created
+* Total claims submitted
+* Claim acceptance rate
+* Average bounty size
+* Total protocol fees collected
+* Gas usage trends
 
-Set up alerts for:
-- Unusually large bounties
-- High rejection rates
-- Failed transactions
-- Large withdrawals
-- Contract balance anomalies
+### Recommended Alerts
+
+Configure alerts for:
+
+* Unusually large bounties
+* High rejection rates
+* Failed transactions
+* Large withdrawals
+* Unexpected contract balance changes
+
+---
 
 ## Upgrade Path
 
-Currently immutable. Future considerations:
+The current deployment is immutable.
 
-1. Proxy pattern for upgradeability
+Future considerations include:
+
+1. Proxy-based upgradeability
 2. Migration strategy for active bounties
-3. Governance mechanism for parameter changes
-4. Community signaling for upgrades
+3. Governance mechanisms for parameter changes
+4. Community signaling before upgrades
+
+---
 
 ## Troubleshooting
 
-### Common Issues
+### Deployment fails with "insufficient funds"
 
-**Deployment fails with "insufficient funds"**
 ```bash
-# Check deployer balance
 cast balance $DEPLOYER_ADDRESS --rpc-url $RPC_URL
 
-# Estimate gas cost
 forge script script/Deploy.s.sol:Deploy --rpc-url $RPC_URL
 ```
 
-**Verification fails**
+### Verification fails
+
 ```bash
-# Check chain ID
 cast chain-id --rpc-url $RPC_URL
 
-# Verify constructor args match
-cast abi-encode "constructor(address,uint256,uint256)" "$TREASURY" "$MIN_BOUNTY" "$MIN_CONTRIB"
+cast abi-encode \
+"constructor(address,uint256,uint256)" \
+"$TREASURY" "$MIN_BOUNTY" "$MIN_CONTRIB"
 ```
 
-**Transaction reverts with "Not issuer"**
+### Transaction reverts with "Not issuer"
+
 ```bash
-# Verify caller address
-cast call <CONTRACT_ADDRESS> "getBounty(uint256)((uint256,address,string,string,uint256,address,uint256,uint256))" <BOUNTY_ID> --rpc-url $RPC_URL
+cast call <CONTRACT_ADDRESS> \
+"getBounty(uint256)((uint256,address,string,string,uint256,address,uint256,uint256))" \
+<BOUNTY_ID> \
+--rpc-url $RPC_URL
 ```
+
+---
 
 ## Support
 
-For deployment issues:
-1. Check docs: `docs/README.md`
-2. Review security report: `docs/POIDH_V3_SECURITY_REPORT.md`
-3. Test on testnet first
-4. Consult team before mainnet deployment
+If you encounter deployment issues:
+
+1. Review `docs/README.md`
+2. Read `docs/POIDH_V3_SECURITY_REPORT.md`
+3. Test on a testnet before deploying to mainnet
+4. Consult the team before any production deployment
+
+---
 
 ## Additional Resources
 
-- [Foundry Deployment Docs](https://book.getfoundry.sh/forge/deploying)
-- [Base Deployment Guide](https://docs.base.org/using-base/deploying)
-- [Arbitrum Deployment Guide](https://developer.offchainlabs.com/docs/deploy_a_contract/)
+* Foundry Deployment Docs
+* Base Deployment Guide
+* Arbitrum Deployment Guide
