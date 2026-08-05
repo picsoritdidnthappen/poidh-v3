@@ -313,11 +313,3 @@ If you encounter deployment issues:
 2. Read `docs/POIDH_V3_SECURITY_REPORT.md`
 3. Test on a testnet before deploying to mainnet
 4. Consult the team before any production deployment
-
----
-
-## Additional Resources
-
-* Foundry Deployment Docs
-* Base Deployment Guide
-* Arbitrum Deployment Guide
