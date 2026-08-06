@@ -301,7 +301,7 @@ function cancelOpenBounty(uint256 bountyId) external nonReentrant
 
 **Requirements:**
 - Caller must be issuer
-- No external contributors yet
+- Bounty is not currently under vote
 
 ---
 
