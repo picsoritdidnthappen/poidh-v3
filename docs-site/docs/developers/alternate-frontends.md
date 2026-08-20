@@ -6,6 +6,12 @@
 
 - https://www.gnars.com/community/bounties
 
+### skatehive
+
+"Complete challenges, upload proof, and earn rewards. Each bounty has a specific task — follow instructions and submit your video to get paid in ETH or HIVE."
+
+- https://skatehive.app/bounties
+
 ### poidh sentinel 
 
 "Autonomous Poidh bounty bot by @0x94t3z.eth that creates, monitors, evaluates, and resolves real-world action bounties end-to-end."
