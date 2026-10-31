@@ -18,6 +18,12 @@
 
 - https://poidhz.com/calendar
 
+### poidh.borodutch.com
+
+"an alternative frontend for the poidh protocol. same contracts, same bounties."
+
+- https://poidh.borodutch.com/
+
 ### poidh.wei.limo (eth mainnet only)
 
 "This page reads the bounty contract through a node you pick, and talks to nothing else. A claim’s picture is either in the claim itself — nothing to fetch, nobody to ask — or on a host the claimant chose, contacted only when you ask to see it.
